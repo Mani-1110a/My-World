@@ -5,6 +5,8 @@ const CONFIG = {
   nickname: "Bava",
   creator: "Mani",
   birthday: "October 10, 2026",
+  firstMessageDate: "July 21, 2026",
+  logo: "/assets/logo.jpeg",
   letter: {
     greeting: "Dear Bava,",
     paragraphs: [
@@ -23,6 +25,14 @@ const CONFIG = {
     "I do not have to try to remember you. My mind does it for me.",
     "And somehow, my heart still chooses you with tenderness.",
   ],
+  gallery: [
+    { image: "/assets/1.jpeg", caption: "A little moment I kept close." },
+    { image: "/assets/2.jpeg", caption: "One of the memories that stayed." },
+    { image: "/assets/3.jpeg", caption: "Some things are ordinary only until they matter." },
+    { image: "/assets/4.jpeg", caption: "A small piece of a beautiful memory." },
+    { image: "/assets/5.jpeg", caption: "The little things still mean a lot." },
+    { image: "/assets/6.jpeg", caption: "For my Bava, with love." },
+  ],
 };
 
 const stars = Array.from({ length: 72 }, (_, i) => ({
@@ -32,7 +42,7 @@ const stars = Array.from({ length: 72 }, (_, i) => ({
   size: i % 8 === 0 ? 4 : i % 3 === 0 ? 3 : 2,
 }));
 
-const symbols = ["♡", "✦", "✧", "❀", "⋆", "♡", "✿", "☾", "✦", "♡", "❀", "✧"];
+const symbols = Array.from({ length: 12 }, () => "♡");
 
 function SkyDecor({ warm = false, dense = false }: { warm?: boolean; dense?: boolean }) {
   return (
@@ -81,7 +91,7 @@ function Countdown() {
 }
 
 function StoryPage({ id, number, eyebrow, title, children, className = "" }: { id: string; number: string; eyebrow: string; title: string; children: React.ReactNode; className?: string }) {
-  return <Section id={id} className={`story-page ${className}`}><SkyDecor warm={className.includes("warm")} /><Reveal><div className="story-page-inner"><span className="page-number">{number} / 17</span><span className="eyebrow">{eyebrow}</span><h2>{title}</h2><div className="story-page-copy">{children}</div></div></Reveal></Section>;
+  return <Section id={id} className={`story-page story-page--${id} ${className}`}><SkyDecor warm={className.includes("warm")} /><Reveal><div className="story-page-inner"><span className="page-number">{number} / 17</span><span className="eyebrow">{eyebrow}</span><h2>{title}</h2><div className="story-page-copy">{children}</div></div></Reveal></Section>;
 }
 
 function Letter() {
@@ -89,7 +99,7 @@ function Letter() {
   const openLetter = () => setOpened(true);
   return (
     <Section id="letter" className="letter-room">
-      <div className="letter-atmosphere"><span>❀</span><span>✦</span><span>♡</span><span>✧</span><span>❀</span></div>
+      <div className="letter-atmosphere"><span>♡</span><span>♡</span><span>♡</span><span>♡</span><span>♡</span></div>
       <div className="section-heading on-paper-heading"><span className="eyebrow">A private little moment</span><h2>A letter for my {CONFIG.nickname}</h2><p>Open this when you are ready. 🤍</p></div>
       <div className={`letter-stage ${opened ? "is-open" : ""}`}>
         {!opened ? <>
@@ -100,9 +110,9 @@ function Letter() {
           </div>
           <Button onClick={openLetter}>Open letter</Button>
         </> : <>
-          <div className="letter-burst" aria-hidden="true">{Array.from({ length: 22 }, (_, index) => <span key={index} style={{ "--i": index } as React.CSSProperties}>{symbols[index % symbols.length]}</span>)}</div>
+          <div className="letter-burst" aria-hidden="true">{Array.from({ length: 22 }, (_, index) => <span key={index} style={{ "--i": index } as React.CSSProperties}>{index % 5 === 0 ? "♥" : symbols[index % symbols.length]}</span>)}</div>
           <article className="love-letter">
-            <div className="letter-corner letter-corner--one">❀</div><div className="letter-corner letter-corner--two">✧</div><div className="letter-corner letter-corner--three">✦</div><div className="letter-corner letter-corner--four">❀</div>
+            <div className="letter-corner letter-corner--one">♡</div><div className="letter-corner letter-corner--two">♡</div><div className="letter-corner letter-corner--three">♡</div><div className="letter-corner letter-corner--four">♡</div>
             <p className="letter-greeting">{CONFIG.letter.greeting}</p>
             {CONFIG.letter.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
             <p className="letter-signoff">{CONFIG.letter.signoff}</p>
@@ -130,20 +140,20 @@ export default function AppPremium() {
     <Section className="hero" id="home"><SkyDecor dense /><div className="hero-content"><span className="eyebrow">A little world made with love</span><h1>For my<br /><em>{CONFIG.recipient}</em></h1><p className="hero-subtitle">A little piece of my heart,<br />made just for you.</p><Button onClick={() => goTo(2)}>Enter my little world</Button><div className="hero-date">{CONFIG.birthday} <span>•</span> just for {CONFIG.nickname}</div></div><div className="scroll-cue">tap next to continue <span>↓</span></div></Section>
     <Section className="countdown-section" id="countdown"><SkyDecor /><Reveal><span className="eyebrow">Until your birthday begins</span><h2>Someone has been waiting<br />for this moment<span className="rose-text">…</span></h2><p className="lead-copy">Not because today is just another day.<br />Because you deserve something made with care.</p><Countdown /><Button onClick={() => goTo(3)}>Open the story</Button></Reveal></Section>
     <Section className="story-section" id="story"><SkyDecor warm dense /><Reveal><div className="story-panel"><span className="eyebrow">For my {CONFIG.nickname}</span><h2>This isn't just a birthday wish.</h2><p>It's a little place I made with all the feelings I never really knew how to put into words.</p><p>So, before you read anything else, just stay here for a little while. 🤍</p><Button onClick={() => goTo(4)}>Step inside <span aria-hidden="true">→</span></Button></div></Reveal></Section>
-    <StoryPage id="timeline" number="04" eyebrow="Some people become important quietly" title="There wasn't one particular moment."><p>There wasn't one particular moment when I decided you were going to mean this much to me.</p><p className="story-emphasis">It just happened.</p><p>Somewhere between our conversations, the random messages, the small things you said, and the moments I remember for no reason, you became someone my heart got attached to.</p><p>And somehow, without even realizing it, you became a part of my everyday thoughts.</p></StoryPage>
-    <StoryPage id="phone" number="05" eyebrow="You became my notification" title="Sometimes it's just a message from you." className="warm-page"><div className="phone-scene"><div className="phone-mockup"><div className="phone-speaker" /><div className="phone-screen"><span className="phone-time">10:10</span><div className="message-bubble">Just a simple message.</div><div className="message-bubble message-bubble--soft">But somehow, seeing your name can change my whole mood. ♡</div></div></div></div><p>I check my phone. Then again. Then again.</p><p>And when there is nothing, my mind starts creating a hundred questions.</p><p className="story-emphasis">Sometimes I know I'm overthinking. But that's what happens when someone matters too much.</p></StoryPage>
+    <StoryPage id="timeline" number="04" eyebrow={`Since ${CONFIG.firstMessageDate}`} title="There wasn't one particular moment."><p>From the day I messaged you, <strong>{CONFIG.firstMessageDate}</strong>, something quietly began.</p><p>There wasn't one particular moment when I decided you were going to mean this much to me.</p><p className="story-emphasis">It just happened.</p><p>Somewhere between our conversations, the random messages, the small things you said, and the moments I remember for no reason, you became someone my heart got attached to.</p><p>And somehow, without even realizing it, you became a part of my everyday thoughts.</p></StoryPage>
+    <StoryPage id="phone" number="05" eyebrow="You became my notification" title="A message from you." className="warm-page"><div className="notification-layout"><div className="notification-time"><span>the time I notice most</span><strong>10:10</strong><i>♡</i></div><div className="notification-copy"><div className="notification-card"><span className="notification-dot" /><div><small>{CONFIG.nickname}</small><strong>Just a simple message.</strong></div><b>now</b></div><p>Nothing special. Nothing dramatic.</p><p>But somehow, seeing your name on my screen can change my whole mood.</p><p className="story-emphasis">I check my phone. Then again. Then again.</p></div></div><div className="waiting-line"><span>And when there is nothing, my mind starts creating a hundred questions.</span><i /><span>Sometimes I know I'm overthinking. But that's what happens when someone matters too much.</span></div></StoryPage>
     <StoryPage id="silence" number="06" eyebrow="And then there is the silence" title="Your silence affects me more than I wish it did."><p>When you don't reply, I try to tell myself not to think about it. I keep myself busy. I tell myself, “Don't overthink.”</p><p>But somewhere in my mind, I'm still waiting for that one notification.</p><p className="story-emphasis">I wish my heart knew how to be a little quieter.</p></StoryPage>
-    <StoryPage id="iknow" number="07" eyebrow="I know" title="Your feelings are yours."><div className="statement-list"><span>I know your feelings aren't the same as mine.</span><span>I'm not making this to change your mind.</span><span>I'm not asking you for an answer.</span><span>I respect your feelings.</span></div></StoryPage>
+    <StoryPage id="iknow" number="07" eyebrow="I know" title="I know."><div className="respect-minimal"><p className="respect-minimal-lead">Your feelings are yours.</p><span className="respect-heart">♡</span><div className="respect-minimal-lines"><p>I know your feelings aren't the same as mine.</p><p>I'm not making this to change your mind.</p><p>I'm not asking you for an answer.</p><p>I respect your feelings.</p></div></div></StoryPage>
     <StoryPage id="heart" number="08" eyebrow="But my heart didn't get the same message" title="My mind understands. My heart… not so much." className="heart-page"><div className="particle-heart">♡</div><p>I still care. I still wait. I still remember. I still worry.</p><p className="story-emphasis">And somewhere inside all of that, I still love you.</p></StoryPage>
     <Section className="memories-section" id="memories"><div className="section-heading"><span className="eyebrow">I don't want to force a place in your life</span><h2>Nothing from you. No pressure.</h2><p>I don't want you to talk to me because you feel guilty, or reply because you feel like you have to.</p></div><div className="memory-grid">{["Talk normally", "Laugh together", "Share random things", "Ask if you ate", "Be happy when you're happy", "Be there when you need someone"].map((title, index) => <Reveal key={title}><article className={`memory-card memory-card--${index + 1}`}><span className="memory-icon">{symbols[index % symbols.length]}</span><h3>{title}</h3><p>{["I don't want my feelings to become a responsibility for you.", "I still want to be able to talk to you normally.", "Share the small, ordinary pieces of life.", "Care in the simplest ways.", "Without demanding anything in return.", "Just be there, gently."][index]}</p></article></Reveal>)}</div></Section>
-    <StoryPage id="ordinary" number="10" eyebrow="Maybe that's what my love looks like" title="Not holding you. Not controlling you."><div className="ordinary-grid"><span>Just caring. <b>♡</b></span><span>Even when it is difficult. <b>✦</b></span><span>Even when I don't know what tomorrow looks like. <b>✧</b></span><span>Even when I don't know what place I have in your life. <b>♡</b></span></div><p className="story-emphasis">You became important to me before I had a chance to decide whether I wanted you to be.</p></StoryPage>
+    <StoryPage id="ordinary" number="10" eyebrow="Maybe that's what my love looks like" title="I care. That's all."><div className="care-manifesto"><div className="care-quote">Not holding you.<br /><em>Not controlling you.</em><span>♡</span></div><div className="care-rule" /><div className="care-details"><p>Even when it is difficult.</p><p>Even when I don't know what tomorrow looks like.</p><p>Even when I don't know what place I have in your life.</p></div></div><p className="story-emphasis">You became important to me before I had a chance to decide whether I wanted you to be.</p></StoryPage>
     <Section className="quote-section" id="quote"><SkyDecor dense /><Reveal><div className="quote-mark">“</div><blockquote>I don't know how to imagine you with someone else.</blockquote><p className="lead-copy">I don't have a right to decide who you choose. Your happiness matters to me, even when my heart has to learn how to accept it.</p><span className="quote-rule" /></Reveal></Section>
-    <StoryPage id="gallery" number="12" eyebrow="Bava…" title="You may never understand how deeply you've become a part of me."><div className="gallery-placeholders"><div><span>♡</span><p>You matter to me.</p><small>Your presence matters.</small></div><div><span>✦</span><p>Your messages matter.</p><small>Even the smallest moments have a place in my heart.</small></div><div><span>☾</span><p>Your silence matters too.</p><small>Sometimes more than I want it to.</small></div></div></StoryPage>
+    <StoryPage id="gallery" number="12" eyebrow="Bava…" title="You may never understand how deeply you've become a part of me."><div className="photo-gallery">{CONFIG.gallery.map((item) => <figure key={item.image}><img src={item.image} alt={item.caption} /><figcaption>{item.caption}</figcaption></figure>)}</div><p className="gallery-note">Your presence, your messages, and even the smallest moments have a place in my heart.</p></StoryPage>
     <Section className="feeling-section" id="feeling"><SkyDecor warm dense /><Reveal><div className="feeling-panel"><span className="eyebrow">I don't know what the future is</span><h2>For once, I don't want to predict it.</h2><p>Maybe life changes everything. Maybe things become different. Maybe some things stay exactly the same.</p><p>I just want to appreciate what you are to me right now.</p><p className="highlight-line">Today, you're someone I care about deeply.</p></div></Reveal></Section>
     <StoryPage id="wishes" number="14" eyebrow="If my heart could speak" title="It wouldn't ask you for promises."><div className="wish-list wish-list--large"><span>“Will you love me?”</span><span>“Will you choose me?”</span><span className="story-emphasis">It would simply say…</span><span>“Bava, I'm glad you exist in my life.”</span></div></StoryPage>
     <Letter />
     <Section className="birthday-section" id="birthday"><SkyDecor dense /><Reveal><span className="eyebrow">And today is your day 🎂</span><h2>Happy Birthday,<br /><em>{CONFIG.recipient} 🤍</em></h2><p className="lead-copy">I hope this year gives you reasons to smile genuinely, and that the things you're working toward slowly become real.</p><div className="wish-list"><span>Healthy</span><span>Peaceful</span><span>Happy</span><span>Beautiful memories</span></div><p className="lead-copy">Somewhere, there is someone who genuinely wishes good things for you.</p></Reveal></Section>
-    <Section className="final-section"><SkyDecor dense /><Reveal><div className="final-heart">♡</div><h2>10 • 10 • 2026</h2><p className="lead-copy">For my Bava.</p><p className="signature">— {CONFIG.creator} 🤍</p><p className="lead-copy">It was never about getting something from you. It was about someone becoming so important to my heart that even ordinary moments started feeling special.</p><Button onClick={() => goTo(1)}>Experience it again</Button></Reveal></Section>
+    <Section className="final-section"><SkyDecor dense /><Reveal><div className="red-heart-row" aria-hidden="true"><span>♥</span><span>♥</span><span>♥</span></div><div className="final-heart">♡</div><h2>10 • 10 • 2026</h2><p className="lead-copy">For my Bava.</p><p className="final-feeling">Today, you're someone I care about deeply.</p><p className="final-truth">These are not just words. These are my true feelings for you.</p><p className="signature">— {CONFIG.creator} 🤍</p><p className="lead-copy">It was never about getting something from you. It was about someone becoming so important to my heart that even ordinary moments started feeling special.</p><Button onClick={() => goTo(1)}>Experience it again</Button></Reveal></Section>
     <PageNav page={page} onPageChange={goTo} />
   </main>;
 }
