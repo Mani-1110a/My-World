@@ -1,0 +1,10 @@
+{
+  "description": "Delivers a deeply personal, emotional birthday journey blending memories, heartfelt messages, and elegant storytelling to celebrate a loved one uniquely.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
