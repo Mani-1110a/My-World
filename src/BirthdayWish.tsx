@@ -33,7 +33,7 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 
 /* ── page system ── */
 .bv-app { width: 100vw; height: 100svh; overflow: hidden; position: relative; background: var(--navy); font-family: 'Inter', sans-serif; color: var(--ivory); }
-.bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+.bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem 8rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
 .bv-page--hidden   { opacity: 0; pointer-events: none; transform: translateY(30px); }
 .bv-page--visible  { opacity: 1; pointer-events: all; transform: translateY(0); }
 .bv-page--leaving  { opacity: 0; pointer-events: none; transform: translateY(-30px); }
@@ -52,12 +52,23 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 .bv-fw { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
 /* ── nav arrow ── */
-.bv-nav { position: fixed; bottom: 1.8rem; left: 50%; transform: translateX(-50%); z-index: 50; display: flex; flex-direction: column; align-items: center; gap: .5rem; }
+.bv-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: .8rem; padding: 1.5rem; background: linear-gradient(transparent, rgba(5,8,15,.8)); backdrop-filter: blur(10px); }
 .bv-nav-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(201,168,76,.5); background: rgba(201,168,76,.08); color: var(--gold); font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(10px); transition: all .3s ease; display: grid; place-items: center; }
 .bv-nav-btn:hover { background: rgba(201,168,76,.2); transform: scale(1.1); }
 .bv-nav-dots { display: flex; gap: .4rem; }
-.bv-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(201,168,76,.3); transition: all .3s ease; }
+.bv-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(201,168,76,.3); transition: all .3s ease; cursor: pointer; }
+.bv-dot:hover { background: rgba(201,168,76,.5); transform: scale(1.2); }
 .bv-dot--active { background: var(--gold); transform: scale(1.4); }
+
+/* ── enhanced navigation ── */
+.bv-nav-container { display: flex; align-items: center; justify-content: center; gap: 1.5rem; width: 100%; max-width: 500px; }
+.bv-nav-back, .bv-nav-next { padding: .8rem 1.8rem; border: 1px solid rgba(201,168,76,.6); border-radius: 999px; background: linear-gradient(120deg,rgba(201,168,76,.15),rgba(184,200,216,.12)); color: var(--ivory); font: 600 .82rem/1 'Inter',sans-serif; letter-spacing: .1em; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(10px); transition: all .3s ease; box-shadow: 0 0 20px rgba(201,168,76,.15); white-space: nowrap; }
+.bv-nav-back:hover, .bv-nav-next:hover { transform: translateY(-3px); box-shadow: 0 0 36px rgba(201,168,76,.35); }
+.bv-nav-back:disabled, .bv-nav-next:disabled { opacity: .3; cursor: not-allowed; transform: none; box-shadow: none; }
+.bv-page-counter { display: flex; align-items: center; gap: .3rem; font-family: 'Inter', sans-serif; font-size: .75rem; color: var(--dim); }
+.bv-current-page { color: var(--gold); font-weight: 600; font-size: .85rem; }
+.bv-divider { color: rgba(201,168,76,.4); }
+.bv-total-pages { color: var(--dim); }
 
 /* ── typography ── */
 .f-display  { font-family: 'Playfair Display', Georgia, serif; }
@@ -130,6 +141,8 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 .bg-scene  { background:radial-gradient(ellipse at 50% 60%, rgba(90,60,110,.25), transparent 45%), radial-gradient(ellipse at 20% 20%, rgba(201,168,76,.08), transparent 35%), linear-gradient(160deg,#050310,#0d0716,#1a0d1e); }
 .bg-wish   { background:radial-gradient(ellipse at 50% 30%, rgba(70,50,100,.2), transparent 40%), linear-gradient(155deg,#060a15,#0c0e1e,#160a18); }
 .bg-final  { background:radial-gradient(ellipse at 50% 40%, rgba(200,133,154,.12), transparent 38%), linear-gradient(160deg,#040408,#09060e); }
+.bg-memories { background:radial-gradient(ellipse at 50% 30%, rgba(180,150,200,.15), transparent 40%), linear-gradient(155deg,#0a0815,#12081e,#1a0a25); }
+.bg-thankyou { background:radial-gradient(ellipse at 50% 50%, rgba(201,168,76,.18), transparent 35%), linear-gradient(160deg,#050a10,#0a1018,#0f0815); }
 
 /* ── shimmer title ── */
 @keyframes bvShimmer { 0%{background-position:200% center} 100%{background-position:-200% center} }
@@ -422,8 +435,27 @@ function useCountdown(target: Date) {
 const PAGES = [
   "wait", "reveal", "story1", "story2", "story3",
   "feelings", "transition", "scene", "wish", "final",
+  "memories", "thankyou",
 ] as const;
 type Page = typeof PAGES[number];
+
+/* ══════════════════════════════════════════════════════════════════════
+   NAVIGATION BUTTON LABELS
+══════════════════════════════════════════════════════════════════════ */
+const BUTTON_LABELS: Record<Page, string> = {
+  wait: "Begin →",
+  reveal: "Continue →",
+  story1: "Next Memory →",
+  story2: "Keep Going →",
+  story3: "More of You →",
+  feelings: "Something I Never Said →",
+  transition: "From My Heart →",
+  scene: "One Little Wish →",
+  wish: "For You →",
+  final: "Almost There →",
+  memories: "One Last Thing →",
+  thankyou: "The Final Wish →",
+};
 
 /* ══════════════════════════════════════════════════════════════════════
    MAIN APP
@@ -448,11 +480,16 @@ export default function BirthdayBava() {
     if (idx < PAGES.length - 1) goTo(PAGES[idx + 1]);
   }, [page, goTo]);
 
+  const prevPage = useCallback(() => {
+    const idx = PAGES.indexOf(page);
+    if (idx > 0) goTo(PAGES[idx - 1]);
+  }, [page, goTo]);
+
   /* auto-advance dark transition lines */
   useEffect(() => {
     if (page !== "transition") return;
     setDarkLines(0);
-    const timers = [1200, 3200, 5200, 7200].map((ms, i) =>
+    const timers = [1200, 3200].map((ms, i) =>
       setTimeout(() => setDarkLines(i + 1), ms)
     );
     return () => timers.forEach(clearTimeout);
@@ -464,7 +501,7 @@ export default function BirthdayBava() {
     setScenePhase(0); setSceneLine(0);
     const t1 = setTimeout(() => setScenePhase(1), 1200);
     const t2 = setTimeout(() => setScenePhase(2), 3000);
-    const lineTimers = [4200, 5600, 7000, 8400, 10000, 11800, 13400].map((ms, i) =>
+    const lineTimers = [4200, 5600].map((ms, i) =>
       setTimeout(() => setSceneLine(i + 1), ms)
     );
     return () => [t1, t2, ...lineTimers].forEach(clearTimeout);
@@ -493,8 +530,8 @@ export default function BirthdayBava() {
 
       <div className="bv-app" id="bava-birthday-app">
         <StarField />
-        <Floaters show={["reveal", "wish", "final"].includes(page)} />
-        <Fireworks active={page === "reveal" || page === "wish"} />
+        <Floaters show={["reveal", "wish", "final", "memories", "thankyou"].includes(page)} />
+        <Fireworks active={page === "reveal" || page === "wish" || page === "memories"} />
 
         {/* ── PAGE 1: WAITING ────────────────────────────────────── */}
         <div id="page-wait" className={`${pageClass("wait")} bg-wait`}>
@@ -508,7 +545,6 @@ export default function BirthdayBava() {
                 <p style={{ color: "var(--gold)", fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,5vw,3rem)", marginBottom: "1.5rem", animation: "bvHeartbeat 1.8s ease-in-out infinite" }}>
                   It's time 🤍
                 </p>
-                <button id="btn-to-reveal" className="bv-btn" onClick={() => goTo("reveal")}>Begin →</button>
               </div>
             ) : (
               <>
@@ -524,8 +560,8 @@ export default function BirthdayBava() {
                   until a special someone's birthday 🌙
                 </p>
                 <div style={{ marginTop: "2rem" }}>
-                  <button id="btn-skip-wait" className="bv-btn bv-btn--ghost" onClick={() => goTo("reveal")}>
-                    Can't wait — take me in
+                  <button className="bv-btn" onClick={() => goTo("reveal")}>
+                    {past ? "Begin →" : "Can't wait — take me in"}
                   </button>
                 </div>
               </>
@@ -541,58 +577,67 @@ export default function BirthdayBava() {
               <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
 
+            <span className="bv-mono-line">October 10 · 2026</span>
             <h1 className="bv-big bv-shimmer" style={{ marginBottom: ".5rem" }}>
               Happy<br />Birthday
             </h1>
             <p className="f-script" style={{ fontSize: "clamp(2.5rem,8vw,4.5rem)", color: "var(--blush)", lineHeight: 1, marginBottom: ".5rem" }}>
               {HIM} 🤍
             </p>
-            <span className="bv-mono-line" style={{ fontSize: ".85rem", marginBottom: "1.5rem" }}>
-              10 · 10 · 2026
-            </span>
             <p className="bv-lead">
-              Today is yours. And I made this, just for you.
+              Today is your day…<br />
+              and somehow, I wanted to make a little piece of my heart<br />
+              just for you.
             </p>
             <div style={{ marginTop: "1.5rem" }}>
-              <button id="btn-reveal-to-story" className="bv-btn" onClick={() => goTo("story1")}>
-                There's something I made for you… →
+              <button className="bv-btn" onClick={() => goTo("story1")}>
+                How it started →
               </button>
             </div>
           </div>
         </div>
 
-        {/* ── PAGE 3: STORY — THE BEGINNING ──────────────────────── */}
+        {/* ── PAGE 3: STORY — HOW IT STARTED ──────────────────────── */}
         <div id="page-story1" className={`${pageClass("story1")} bg-story`} style={{ gap: "2rem" }}>
-          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Chapter I</span>
-            <h2 className="bv-h2">The <em>Beginning</em></h2>
-            <p className="bv-lead">
-              Before today became your birthday,<br />
-              there was a beginning. A moment when ordinary<br />
-              conversations started to feel <em>extraordinary.</em>
+          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both", maxWidth: 680 }}>
+            <span className="bv-eyebrow">Screen 2</span>
+            <h2 className="bv-h2">How It <em>Started</em></h2>
+            
+            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
+              I never knew when it happened.
             </p>
-            {/* photo row */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: ".8rem", margin: "1.5rem 0", maxWidth: "460px" }}>
-              <PhotoSlot src="/assets/1.jpeg" caption="The beginning." style={{ aspectRatio: "4/5" }} />
-              <PhotoSlot src="/assets/2.jpeg" caption="Where it started." style={{ aspectRatio: "4/5", marginTop: "1.5rem" }} />
+            
+            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem", fontStyle: "italic" }}>
+              Maybe it was hidden inside our random conversations,<br />
+              the little "tinnava?" messages,<br />
+              the silly talks,<br />
+              and those ordinary moments I never thought I'd remember this much.
+            </p>
+            
+            <div style={{ width: "min(100%,280px)", margin: "2rem auto", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
+              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
-            <p className="bv-lead" style={{ fontSize: "clamp(1rem,2vw,1.2rem)" }}>
-              I didn't plan to remember so much.<br />
-              But some people have a way of making<br />
-              ordinary moments <strong>impossible to forget.</strong>
+            
+            <p className="bv-lead" style={{ color: "var(--dim)", marginTop: "1.5rem" }}>
+              Some people enter your life quietly…<br />
+              and somehow become impossible to forget.
             </p>
-            <button id="btn-story1-next" className="bv-btn" style={{ marginTop: "1.5rem" }} onClick={() => goTo("story2")}>Continue →</button>
           </div>
         </div>
 
-        {/* ── PAGE 4: STORY — THE LITTLE THINGS ─────────────────── */}
+        {/* ── PAGE 4: STORY — SOMEHOW YOU BECAME SPECIAL ─────────────────── */}
         <div id="page-story2" className={`${pageClass("story2")} bg-story`} style={{ gap: "2rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both", maxWidth: 780 }}>
-            <span className="bv-eyebrow">Chapter II</span>
-            <h2 className="bv-h2">The Little <em>Things</em></h2>
+            <span className="bv-eyebrow">Screen 3</span>
+            <h2 className="bv-h2">Somehow, You Became <em>Special</em></h2>
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
-              It was never one big moment.<br />
-              It was a hundred little things that added up to everything.
+              Somewhere between talking to you<br />
+              and waiting for your messages,<br />
+              you slowly became a part of my everyday life.
+            </p>
+            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
+              I didn't plan it.<br />
+              My heart just got used to you.
             </p>
             <div className="bv-gallery">
               {[
@@ -606,116 +651,88 @@ export default function BirthdayBava() {
                 <PhotoSlot key={i} src={p.src} caption={p.caption} />
               ))}
             </div>
-            <button id="btn-story2-next" className="bv-btn" style={{ marginTop: "1.5rem" }} onClick={() => goTo("story3")}>Continue →</button>
           </div>
         </div>
 
-        {/* ── PAGE 5: STORY — WHAT I SEE ─────────────────────────── */}
+        {/* ── PAGE 5: STORY — THE LITTLE THINGS ─────────────────────────── */}
         <div id="page-story3" className={`${pageClass("story3")} bg-story`} style={{ gap: "2rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Chapter III</span>
-            <h2 className="bv-h2">What I <em>see</em> in you</h2>
-            <div style={{ display: "flex", flexDirection: "column", gap: ".65rem", margin: "1.5rem 0", textAlign: "left" }}>
-              {[
-                { emoji: "💙", line: "The way you carry yourself, quietly confident." },
-                { emoji: "🌟", line: "The warmth behind everything you say." },
-                { emoji: "🌙", line: "The depth in you that most people never see." },
-                { emoji: "🤍", line: "The person who made my ordinary days feel different." },
-              ].map(({ emoji, line }, i) => (
-                <div key={i} style={{ display: "flex", alignItems: "center", gap: ".8rem", padding: ".9rem 1.2rem", borderLeft: "2px solid rgba(200,133,154,.5)", background: "rgba(255,255,255,.04)", animation: `bvFadeUp .8s ${i * 0.2}s ease both` }}>
-                  <span style={{ fontSize: "1.4rem" }}>{emoji}</span>
-                  <span style={{ font: "400 clamp(1rem,2.2vw,1.2rem)/1.5 'Cormorant Garamond',serif", color: "var(--dim)" }}>{line}</span>
-                </div>
-              ))}
-            </div>
-            <button id="btn-story3-next" className="bv-btn" onClick={() => goTo("feelings")}>Continue →</button>
+            <span className="bv-eyebrow">Screen 4</span>
+            <h2 className="bv-h2">The Little <em>Things</em></h2>
+            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
+              Maybe you never noticed…<br />
+              but your smallest words stayed with me.
+            </p>
+            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
+              A simple message from you could change my entire day.<br />
+              And sometimes, even seeing your picture<br />
+              was enough to make me smile.
+            </p>
           </div>
         </div>
 
         {/* ── PAGE 6: FEELINGS ───────────────────────────────────── */}
         <div id="page-feelings" className={`${pageClass("feelings")} bg-feel`} style={{ gap: "1.5rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Everything I never said</span>
-            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>I don't know <em>exactly</em><br />when it happened…</h2>
+            <span className="bv-eyebrow">Screen 5</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>What I Never <em>Wanted</em></h2>
             <p className="bv-lead">
-              But somewhere between our conversations<br />
-              and ordinary days,<br />
-              <strong>you became someone my heart started looking for.</strong>
+              I never wanted to force my feelings on you.<br />
+              I never wanted to make you uncomfortable.
             </p>
             <div style={{ width: "60px", height: "1px", background: "rgba(200,133,154,.4)", margin: "1.5rem auto" }} />
             <p className="bv-lead">
-              I never wanted to force my feelings<br />
-              into your life.
+              I know what you've told me, Bava…<br />
+              and I respect your feelings.
             </p>
             <p className="bv-lead" style={{ color: "var(--blush)" }}>
-              <em>I only wanted you to know<br />that they were real.</em>
+              <em>I just wanted you to know that mine were always real.</em>
             </p>
-            <button id="btn-feelings-next" className="bv-btn" style={{ marginTop: "1.5rem" }} onClick={() => goTo("transition")}>
-              There's something else… →
-            </button>
           </div>
         </div>
 
         {/* ── PAGE 7: DARK TRANSITION ────────────────────────────── */}
         <div id="page-transition" className={`${pageClass("transition")} bg-trans`}>
           <div className="bv-dark-reveal bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <p className={darkLines >= 1 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1.4rem,4vw,2.6rem)" }}>
-              And after everything I felt…
+            <span className="bv-eyebrow">Screen 6</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Even In The <em>Silence</em></h2>
+            <p className={darkLines >= 1 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)" }}>
+              There were days I waited for your message,<br />
+              checking my phone again and again,<br />
+              wondering if you were busy,<br />
+              wondering if I had done something wrong.
             </p>
-            <p className={darkLines >= 2 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1.4rem,4vw,2.6rem)" }}>
-              there was still one thing I wanted to do.
+            <p className={darkLines >= 2 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)", color: "var(--blush)" }}>
+              But even in the silence…<br />
+              I still cared.
             </p>
-            <p className={darkLines >= 3 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1.1rem,3vw,1.8rem)", color: "var(--dim)" }}>
-              Not to ask you for anything.
-            </p>
-            <p className={darkLines >= 4 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1.1rem,3vw,1.8rem)", color: "var(--blush)" }}>
-              Just to tell you what you mean to me.
-            </p>
-            {darkLines >= 4 && (
-              <button id="btn-trans-next" className="bv-btn" style={{ marginTop: "2.5rem", animation: "bvFadeUp .8s ease both" }} onClick={() => goTo("scene")}>
-                I'm ready →
-              </button>
-            )}
+
           </div>
         </div>
 
         {/* ── PAGE 8: KNEELING COUPLE SCENE ──────────────────────── */}
         <div id="page-scene" className={`${pageClass("scene")} bg-scene`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div style={{ position: "relative", zIndex: 5, width: "100%", maxWidth: 680, textAlign: "center" }}>
+            <span className="bv-eyebrow">Screen 7</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>If I Ever <em>Hurt You</em></h2>
+            
             {/* SVG couple */}
             <div className="bv-scene-wrap">
               <CoupleScene phase={scenePhase} />
             </div>
+            
             {/* progressive text */}
             <div className="bv-scene-text" style={{ marginTop: "1rem" }}>
-              <p className={`bv-scene-line bv-scene-line--big ${sceneLine >= 1 ? "bv-scene-line--active" : ""}`}>
-                {HIM}…
+              <p className={`bv-scene-line bv-scene-line--sm ${sceneLine >= 1 ? "bv-scene-line--active" : ""}`}>
+                If my words, my feelings,<br />
+                or anything I did ever made you uncomfortable,<br />
+                I'm truly sorry, Bava. 🥺
               </p>
               <p className={`bv-scene-line bv-scene-line--sm ${sceneLine >= 2 ? "bv-scene-line--active" : ""}`}>
-                I don't have a perfect speech.
+                I never wanted to become a reason<br />
+                for your heart to feel heavy.
               </p>
-              <p className={`bv-scene-line bv-scene-line--sm ${sceneLine >= 3 ? "bv-scene-line--active" : ""}`}>
-                I don't know what the future holds.
-              </p>
-              <p className={`bv-scene-line bv-scene-line--sm ${sceneLine >= 4 ? "bv-scene-line--active" : ""}`}>
-                I don't want to change your heart.
-              </p>
-              <p className={`bv-scene-line ${sceneLine >= 5 ? "bv-scene-line--active" : ""}`} style={{ fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.15rem,3vw,1.6rem)", color: "var(--ivory)" }}>
-                I just wanted, for one moment,<br />
-                to kneel before the person<br />
-                who became so important to me…
-              </p>
-              <p className={`bv-scene-line ${sceneLine >= 6 ? "bv-scene-line--active" : ""}`} style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.1rem,2.5vw,1.4rem)", fontStyle: "italic", color: "var(--blush)" }}>
-                Not asking you to choose me.
-              </p>
-              <p className={`bv-scene-line ${sceneLine >= 7 ? "bv-scene-line--active" : ""}`} style={{ fontFamily: "'Cormorant Garamond',serif", fontSize: "clamp(1.1rem,2.5vw,1.4rem)", fontStyle: "italic", color: "var(--blush)" }}>
-                Just wishing that life always chooses <em>happiness</em> for you. 🤍
-              </p>
-              {sceneLine >= 7 && (
-                <button id="btn-scene-next" className="bv-btn" style={{ marginTop: "2rem", animation: "bvFadeUp .8s ease both" }} onClick={() => goTo("wish")}>
-                  Continue →
-                </button>
-              )}
+
             </div>
           </div>
         </div>
@@ -723,112 +740,171 @@ export default function BirthdayBava() {
         {/* ── PAGE 9: BIRTHDAY WISH ──────────────────────────────── */}
         <div id="page-wish" className={`${pageClass("wish")} bg-wish`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <div style={{ fontSize: "4.5rem", marginBottom: "1rem", animation: "bvHeartbeat 2s ease-in-out infinite" }}>🎂</div>
-            <h2 className="bv-big bv-shimmer" style={{ marginBottom: ".5rem" }}>
-              HAPPY<br />BIRTHDAY
-            </h2>
-            <p className="f-script" style={{ fontSize: "clamp(3rem,10vw,5.5rem)", color: "var(--blush)", marginBottom: "1.5rem", lineHeight: 1 }}>
-              {HIM} 🤍
+            <span className="bv-eyebrow">Screen 8</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>What You Mean <em>To Me</em></h2>
+            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
+              I don't know what place I'll have in your life.<br />
+              I don't know what tomorrow will look like.
             </p>
-            <div className="bv-wish-grid">
-              {[
-                { e: "🌟", w: "May this year bring you everything you've been working for." },
-                { e: "🌙", w: "May you find peace in the places you need it most." },
-                { e: "💫", w: "May your dreams become real, one by one." },
-                { e: "😊", w: "May you always have a reason to smile." },
-                { e: "🤍", w: "May you always remain the person who made ordinary moments feel special." },
-              ].map(({ e, w }, i) => (
-                <div key={i} className="bv-wish-item" style={{ animationDelay: `${i * 0.15}s` }}>
-                  <span style={{ marginRight: ".6rem" }}>{e}</span>{w}
-                </div>
-              ))}
-            </div>
-            <button id="btn-wish-next" className="bv-btn" style={{ marginTop: "1.5rem" }} onClick={() => goTo("final")}>
-              One last thing… →
-            </button>
+            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
+              But I'll always be grateful<br />
+              that somewhere in this huge world,<br />
+              I got to know you. 🤍
+            </p>
           </div>
         </div>
 
         {/* ── PAGE 10: FINAL ─────────────────────────────────────── */}
         <div id="page-final" className={`${pageClass("final")} bg-final`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            {/* final photo */}
-            <div style={{ width: "min(100%,180px)", margin: "0 auto 1.5rem", borderRadius: "50%", overflow: "hidden", border: "2px solid rgba(200,133,154,.4)", boxShadow: "0 0 0 8px rgba(200,133,154,.06), 0 0 40px rgba(200,133,154,.2)" }}>
-              <PhotoSlot src="/assets/logo.jpeg" caption="Anjan" style={{ borderRadius: "50%", aspectRatio: "1" }} />
+            {/* Final hero photo */}
+            <div style={{ width: "min(100%,280px)", margin: "0 auto 2rem", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 12px rgba(201,168,76,.08), 0 0 60px rgba(201,168,76,.3)", animation: "bvGlowPulse 4s ease-in-out infinite" }}>
+              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
 
+            <span className="bv-eyebrow">Screen 9</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>My Birthday Wish <em>For You</em></h2>
+            
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
-              Whatever life writes next,<br />
-              <strong>I'm grateful that our paths crossed.</strong>
+              Today, I don't want anything from you.
             </p>
-            <div style={{ width: "50px", height: "1px", background: "rgba(200,133,154,.4)", margin: "1rem auto" }} />
-            <p className="bv-lead">
-              Today isn't about my wishes.
-            </p>
-            <p className="bv-lead" style={{ color: "var(--blush)" }}>
-              <em>Today is about yours.</em>
-            </p>
-            <div style={{ margin: "2rem 0" }}>
-              <p style={{ font: "600 clamp(2rem,6vw,3.5rem)/1 'Playfair Display',serif", color: "var(--ivory)", marginBottom: ".5rem" }}>
-                Happy Birthday,
-              </p>
-              <p className="f-script" style={{ fontSize: "clamp(3rem,10vw,5rem)", color: "var(--blush)", lineHeight: 1 }}>
-                {HIM2}. 🤍
-              </p>
+            
+            <div className="bv-wish-grid">
+              {[
+                { e: "🌟", w: "I only wish that you stay happy," },
+                { e: "🌙", w: "achieve everything you're dreaming about," },
+                { e: "💫", w: "find peace wherever you go," },
+                { e: "🤍", w: "and never lose the beautiful person you are." },
+              ].map(({ e, w }, i) => (
+                <div key={i} className="bv-wish-item" style={{ animationDelay: `${i * 0.15}s` }}>
+                  <span style={{ marginRight: ".6rem" }}>{e}</span>{w}
+                </div>
+              ))}
             </div>
-            <p className="f-script" style={{ fontSize: "clamp(1.5rem,4vw,2.2rem)", color: "var(--dim)", marginBottom: "2rem" }}>
-              — {HER}
+            
+            <p className="bv-lead" style={{ color: "var(--blush)", marginTop: "1.5rem" }}>
+              May life be gentle with you, Bava. 🌙
             </p>
-            <span className="bv-mono-line">10 · 10 · 2026</span>
+          </div>
+        </div>
 
-            {/* secret button */}
-            <div style={{ marginTop: "2.5rem" }}>
-              <button id="btn-one-last-thing" className="bv-btn bv-btn--ghost" onClick={() => setShowSecret(true)}>
-                One last thing…
-              </button>
+        {/* ── PAGE 11: MEMORIES ─────────────────────────────────────── */}
+        <div id="page-memories" className={`${pageClass("memories")} bg-story`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
+          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
+            <span className="bv-eyebrow">Screen 10</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Precious <em>Memories</em></h2>
+            
+            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
+              Every moment with you became a memory I treasure.
+            </p>
+            
+            <div className="bv-gallery">
+              {[
+                { src: "/assets/1.jpeg", caption: "Where it all began." },
+                { src: "/assets/2.jpeg", caption: "A moment I'll never forget." },
+                { src: "/assets/3.jpeg", caption: "Simple times, deep feelings." },
+                { src: "/assets/4.jpeg", caption: "Your smile says everything." },
+                { src: "/assets/5.jpeg", caption: "The person who matters." },
+                { src: undefined, caption: "Add your special memory here." },
+              ].map((p, i) => (
+                <PhotoSlot key={i} src={p.src} caption={p.caption} />
+              ))}
             </div>
           </div>
         </div>
 
-        {/* ── NAV: dots + arrow ─────────────────────────────────── */}
-        {!showSecret && (
-          <nav className="bv-nav" aria-label="Page navigation">
-            <div className="bv-nav-dots">
-              {PAGES.map((p, i) => (
-                <button key={p} className={`bv-dot ${page === p ? "bv-dot--active" : ""}`} aria-label={`Go to page ${i + 1}`} onClick={() => goTo(p)} title={p} />
-              ))}
+        {/* ── PAGE 12: THANK YOU ─────────────────────────────────────── */}
+        <div id="page-thankyou" className={`${pageClass("thankyou")} bg-final`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
+          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
+            <span className="bv-eyebrow">Screen 11</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Thank <em>You</em></h2>
+            
+            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
+              Thank you for being part of my story, Bava.
+            </p>
+            
+            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
+              You may never know how much you mean to me,<br />
+              but I want you to know that I'll always remember you fondly.
+            </p>
+            
+            <div style={{ width: "min(100%,220px)", margin: "2rem auto", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
+              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
-            {page !== "final" && page !== "scene" && page !== "transition" && (
-              <button id="btn-nav-next" className="bv-nav-btn" onClick={nextPage} aria-label="Next page">↓</button>
-            )}
+          </div>
+        </div>
+
+        {/* ── NAV: enhanced with back/next buttons ─────────────────────────────────── */}
+        {idx >= 2 && (
+          <nav className="bv-nav" aria-label="Page navigation">
+            <div className="bv-nav-container">
+              <button 
+                className="bv-nav-back" 
+                onClick={prevPage} 
+                disabled={idx === 0}
+                aria-label="Go to previous page"
+              >
+                ← Back
+              </button>
+              <div className="bv-page-counter">
+                <span className="bv-current-page">{idx + 1}</span>
+                <span className="bv-divider">/</span>
+                <span className="bv-total-pages">{PAGES.length}</span>
+              </div>
+              <button 
+                className="bv-nav-next" 
+                onClick={nextPage}
+                aria-label="Go to next page"
+              >
+                {BUTTON_LABELS[page]}
+              </button>
+            </div>
           </nav>
         )}
 
         {/* ── SECRET ENDING ─────────────────────────────────────── */}
         {showSecret && (
           <div className="bv-secret" id="secret-ending" role="dialog" aria-label="Secret message">
-            <p className={secretStep >= 1 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1.2rem,3.5vw,2rem)", marginBottom: "1.5rem" }}>
-              If you ever wondered whether you mattered to me…
-            </p>
-            <p className={secretStep >= 2 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1.5rem,5vw,3rem)", color: "var(--blush)" }}>
-              You did.
-            </p>
-            <p className={secretStep >= 3 ? "show f-display" : "f-display"} style={{ fontSize: "clamp(1rem,2.5vw,1.5rem)", color: "var(--dim)", maxWidth: "400px" }}>
-              More than I ever knew how to explain. 🥀
-            </p>
-            <div style={{ marginTop: "3rem" }}>
-              <p className={secretStep >= 4 ? "show bv-mono-line" : "bv-mono-line"} style={{ fontSize: ".9rem", marginBottom: ".5rem" }}>
-                10 · 10 · 2026
+            <div style={{ maxWidth: "600px", textAlign: "center" }}>
+              <h1 className="bv-big bv-shimmer" style={{ marginBottom: "1rem" }}>
+                Happy<br />Birthday
+              </h1>
+              <p className="f-script" style={{ fontSize: "clamp(2.5rem,7vw,4rem)", color: "var(--blush)", marginBottom: "1.5rem", lineHeight: 1 }}>
+                {HIM} 🤍
               </p>
-              <p className={`f-script ${secretStep >= 4 ? "show" : ""}`} style={{ fontSize: "clamp(2.5rem,7vw,4rem)", color: "var(--blush)", lineHeight: 1, opacity: secretStep >= 4 ? 1 : 0, transition: "opacity 1.8s ease" }}>
-                Happy Birthday, {HIM}. 🤍
+              
+              <span className="bv-eyebrow">Screen 12 — The Final Wish</span>
+              
+              <p className={secretStep >= 1 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)", marginTop: "2rem" }}>
+                If one day you remember me,<br />
+                I hope you remember the girl<br />
+                who cared for you with her whole heart,<br />
+                without wanting to change you.
               </p>
+              
+              <p className={secretStep >= 2 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)", color: "var(--blush)", marginTop: "1.5rem" }}>
+                Thank you for being a part of my story.
+              </p>
+              
+              <p className={secretStep >= 3 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)", marginTop: "1.5rem" }}>
+                Whatever comes next,<br />
+                I'm just grateful that you were here. 🥀
+              </p>
+              
+              <div style={{ marginTop: "2rem" }}>
+                <p className={`f-script ${secretStep >= 4 ? "show" : ""}`} style={{ fontSize: "clamp(2rem,6vw,3rem)", color: "var(--blush)", lineHeight: 1, opacity: secretStep >= 4 ? 1 : 0, transition: "opacity 1.8s ease" }}>
+                  — {HER} 🤍
+                </p>
+              </div>
+              
+              {secretStep >= 4 && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "1rem", alignItems: "center", marginTop: "3rem", animation: "bvFadeUp .8s ease both" }}>
+                  <button id="btn-restart-from-secret" className="bv-btn" onClick={() => { setShowSecret(false); goTo("wait"); }}>
+                    Experience Again ↺
+                  </button>
+                </div>
+              )}
             </div>
-            {secretStep >= 4 && (
-              <button id="btn-close-secret" className="bv-btn bv-btn--ghost" style={{ marginTop: "3rem", animation: "bvFadeUp .8s ease both" }} onClick={() => setShowSecret(false)}>
-                ← Back
-              </button>
-            )}
           </div>
         )}
       </div>
