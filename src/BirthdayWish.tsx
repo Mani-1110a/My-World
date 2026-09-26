@@ -819,7 +819,7 @@ export default function BirthdayBava() {
         {/* ── PAGE 8: KNEELING COUPLE SCENE ──────────────────────── */}
         <div id="page-scene" className={`${pageClass("scene")} bg-scene`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div style={{ position: "relative", zIndex: 5, width: "100%", maxWidth: 680, textAlign: "center" }}>
-            <span className="bv-eyebrow">Screen 7</span>
+            <span className="bv-eyebrow">A gentle apology</span>
             <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>If I Ever <em>Hurt You</em></h2>
             
             {/* SVG couple */}
@@ -846,7 +846,7 @@ export default function BirthdayBava() {
         {/* ── PAGE 9: BIRTHDAY WISH ──────────────────────────────── */}
         <div id="page-wish" className={`${pageClass("wish")} bg-wish`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Screen 8</span>
+            <span className="bv-eyebrow">What I wish for you</span>
             <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>What You Mean <em>To Me</em></h2>
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
               I don't know what place I'll have in your life.<br />
@@ -868,7 +868,7 @@ export default function BirthdayBava() {
               <PhotoSlot src={photo5} caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
 
-            <span className="bv-eyebrow">Screen 9</span>
+            <span className="bv-eyebrow">With warm wishes</span>
             <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>My Birthday Wish <em>For You</em></h2>
             
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
@@ -897,7 +897,7 @@ export default function BirthdayBava() {
         {/* ── PAGE 11: MEMORIES ─────────────────────────────────────── */}
         <div id="page-memories" className={`${pageClass("memories")} bg-story`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Screen 10</span>
+            <span className="bv-eyebrow">Moments I keep close</span>
             <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Precious <em>Memories</em></h2>
             
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
@@ -975,7 +975,7 @@ export default function BirthdayBava() {
                 {HIM} 🤍
               </p>
               
-              <span className="bv-eyebrow">Screen 12 — The Final Wish</span>
+              <span className="bv-eyebrow">The final wish</span>
               
               <p className={secretStep >= 1 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)", marginTop: "2rem" }}>
                 If one day you remember me,<br />
