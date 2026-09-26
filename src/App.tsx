@@ -1,1 +1,1 @@
-export { default } from "./AppPremium";
+export { default } from "./BirthdayWish";
