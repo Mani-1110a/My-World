@@ -810,8 +810,8 @@ export default function BirthdayBava() {
                 { src: "/assets/2.jpeg", caption: "A moment I'll never forget." },
                 { src: "/assets/1.jpeg", caption: "Simple times, deep feelings." },
                 { src: "/assets/4.jpeg", caption: "Your smile says everything." },
-                { src: "/assets/5.jpeg", caption: "The person who matters." },
-                { src: undefined, caption: "Add your special memory here." },
+                { src: "/assets/3.jpeg", caption: "The person who matters." },
+                { src: "/assets/6.jpeg", caption: "A memory I keep close." },
               ].map((p, i) => (
                 <PhotoSlot key={i} src={p.src} caption={p.caption} />
               ))}
