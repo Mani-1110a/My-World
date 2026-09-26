@@ -7,6 +7,7 @@ const HIM = "Anjan Bava";
 const HIM2 = "Anjan";
 const HER = "Mani";
 const BDAY = new Date("2026-10-10T00:00:00"); // midnight Oct 10
+const publicAsset = (name: string) => `${import.meta.env.BASE_URL}assets/${name}`;
 
 /* ══════════════════════════════════════════════════════════════════════
    STYLES injected once
@@ -35,6 +36,7 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 .bv-app { width: 100vw; height: 100svh; overflow: hidden; position: relative; background: var(--navy); font-family: 'Inter', sans-serif; color: var(--ivory); }
 .bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem 8rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
 #page-reveal { justify-content: flex-start; }
+#page-final { justify-content: flex-start; }
 #page-story1 { justify-content: flex-start; padding: 0; }
 #page-story2 { justify-content: flex-start; padding: 0; }
 #page-story3 { justify-content: flex-start; padding: 0; }
@@ -608,7 +610,7 @@ export default function BirthdayBava() {
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.4s ease both" }}>
             {/* hero photo slot */}
             <div style={{ width: "min(100%,220px)", margin: "0 auto 2rem", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
-              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
+              <PhotoSlot src={publicAsset("5.jpeg")} caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
 
             <span className="bv-mono-line">October 10 · 2026</span>
@@ -634,7 +636,7 @@ export default function BirthdayBava() {
         {/* ── PAGE 3: STORY — HOW IT STARTED ──────────────────────── */}
         <div id="page-story1" className={`${pageClass("story1")} bg-story`}>
           <div className="bv-eye-scene">
-            <img className="bv-eye-fullscreen" src="/assets/5.jpeg" alt="A sketch of Bava's eyes in a sunlit notebook" />
+            <img className="bv-eye-fullscreen" src={publicAsset("5.jpeg")} alt="A sketch of Bava's eyes in a sunlit notebook" />
             <div className="bv-eye-copy">
               <span className="bv-eye-eyebrow">A little truth from my heart</span>
               <h2 className="bv-eye-title">I never planned to <em>feel this much.</em></h2>
@@ -649,7 +651,7 @@ export default function BirthdayBava() {
         {/* ── PAGE 4: STORY — SOMEHOW YOU BECAME SPECIAL ─────────────────── */}
         <div id="page-story2" className={`${pageClass("story2")} bg-story`}>
           <div className="bv-eye-scene bv-eye-scene--story2">
-            <img className="bv-eye-fullscreen bv-eye-fullscreen--story2" src="/assets/1.jpeg" alt="Bava smiling in profile" />
+            <img className="bv-eye-fullscreen bv-eye-fullscreen--story2" src={publicAsset("1.jpeg")} alt="Bava smiling in profile" />
           </div>
           <div className="bv-eye-copy bv-eye-copy--below">
             <h2 className="bv-eye-title">Somehow, You Became <em>Special</em></h2>
@@ -665,7 +667,7 @@ export default function BirthdayBava() {
         {/* ── PAGE 5: STORY — THE LITTLE THINGS ─────────────────────────── */}
         <div id="page-story3" className={`${pageClass("story3")} bg-story`}>
           <div className="bv-eye-scene bv-eye-scene--story3">
-            <img className="bv-eye-fullscreen bv-eye-fullscreen--story3" src="/assets/5.jpeg" alt="Bava smiling in the sunlight" />
+            <img className="bv-eye-fullscreen bv-eye-fullscreen--story3" src={publicAsset("5.jpeg")} alt="Bava smiling in the sunlight" />
             <div className="bv-eye-copy bv-eye-copy--story3">
               <h2 className="bv-eye-title">The Little <em>Things</em></h2>
               <div className="bv-eye-divider" aria-hidden="true" />
@@ -765,7 +767,7 @@ export default function BirthdayBava() {
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
             {/* Final hero photo */}
             <div style={{ width: "min(100%,280px)", margin: "0 auto 2rem", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 12px rgba(201,168,76,.08), 0 0 60px rgba(201,168,76,.3)", animation: "bvGlowPulse 4s ease-in-out infinite" }}>
-              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
+              <PhotoSlot src={publicAsset("5.jpeg")} caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
 
             <span className="bv-eyebrow">Screen 9</span>
@@ -806,12 +808,12 @@ export default function BirthdayBava() {
             
             <div className="bv-gallery">
               {[
-                { src: "/assets/5.jpeg", caption: "Where it all began." },
-                { src: "/assets/2.jpeg", caption: "A moment I'll never forget." },
-                { src: "/assets/1.jpeg", caption: "Simple times, deep feelings." },
-                { src: "/assets/4.jpeg", caption: "Your smile says everything." },
-                { src: "/assets/3.jpeg", caption: "The person who matters." },
-                { src: "/assets/6.jpeg", caption: "A memory I keep close." },
+                { src: publicAsset("5.jpeg"), caption: "Where it all began." },
+                { src: publicAsset("2.jpeg"), caption: "A moment I'll never forget." },
+                { src: publicAsset("1.jpeg"), caption: "Simple times, deep feelings." },
+                { src: publicAsset("4.jpeg"), caption: "Your smile says everything." },
+                { src: publicAsset("3.jpeg"), caption: "The person who matters." },
+                { src: publicAsset("6.jpeg"), caption: "A memory I keep close." },
               ].map((p, i) => (
                 <PhotoSlot key={i} src={p.src} caption={p.caption} />
               ))}
@@ -835,7 +837,7 @@ export default function BirthdayBava() {
             </p>
             
             <div style={{ width: "min(100%,220px)", margin: "2rem auto", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
-              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
+              <PhotoSlot src={publicAsset("5.jpeg")} caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
           </div>
         </div>
