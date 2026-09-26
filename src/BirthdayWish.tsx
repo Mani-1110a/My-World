@@ -36,16 +36,27 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 .bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem 8rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
 #page-reveal { justify-content: flex-start; }
 #page-story1 { justify-content: flex-start; padding: 0; }
+#page-story2 { justify-content: flex-start; padding: 0; }
 .bv-eye-scene { position: absolute; inset: 0; overflow: hidden; background: #090807; }
 .bv-eye-scene::after { position: absolute; inset: 35% 0 0; z-index: 1; background: linear-gradient(180deg, transparent 0%, rgba(5,8,15,.42) 25%, rgba(5,8,15,.88) 100%); content: ""; pointer-events: none; }
 .bv-eye-fullscreen { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
 .bv-eye-copy { position: absolute; right: 0; bottom: clamp(3.25rem, 5.5svh, 4.25rem); left: 0; z-index: 2; width: min(100% - 2.5rem, 800px); max-height: calc(100% - 6rem); margin: 0 auto; overflow-y: auto; padding: .8rem .25rem; text-align: center; animation: bvFadeUp 1.2s ease both; }
+.bv-eye-scene--story2 { position: relative; flex: 0 0 auto; width: 100%; height: clamp(250px, 46svh, 480px); }
+.bv-eye-fullscreen--story2 { position: relative; inset: auto; object-position: center center; transform: scale(1.09); transform-origin: center center; }
+.bv-eye-copy--below { position: relative; inset: auto; z-index: 2; width: 100%; max-height: none; margin: 0 auto; overflow: visible; padding: clamp(1.6rem, 3.8svh, 2.2rem) 1.25rem 7rem; border-top: 1px solid rgba(232,191,201,.16); background: #110d15; }
+.bv-eye-copy--below .bv-eye-title, .bv-eye-copy--below .bv-eye-message { text-shadow: none; }
+.bv-eye-copy--below .bv-eye-title { margin-bottom: .9rem; }
+.bv-eye-copy--below .bv-eye-divider { margin: 0 auto 1rem; }
 .bv-eye-eyebrow { display: block; margin-bottom: .65rem; color: var(--gold); font: 600 .62rem/1.2 'Inter', sans-serif; letter-spacing: .24em; text-transform: uppercase; }
 .bv-eye-title { margin: 0 0 .8rem; color: var(--ivory); font: italic 600 clamp(1.5rem, 4vw, 2.6rem)/1.1 'Playfair Display', Georgia, serif; text-shadow: 0 2px 18px rgba(0,0,0,.65); }
 .bv-eye-title em { color: var(--blush); font-style: italic; }
 .bv-eye-message { max-width: 720px; margin: 0 auto; color: rgba(255,248,242,.95); font: 400 clamp(.95rem, 1.9vw, 1.12rem)/1.42 'Cormorant Garamond', Georgia, serif; text-shadow: 0 2px 12px rgba(0,0,0,.8); }
 .bv-eye-message p { margin: 0 0 .55rem; }
 .bv-eye-message strong { color: var(--blush); font-weight: 600; }
+.bv-eye-message--story2 { font-size: clamp(1.02rem, 2vw, 1.2rem); line-height: 1.42; }
+.bv-eye-message--story2 p { margin-bottom: .65rem; }
+.bv-eye-message--story2 p:last-child { margin-bottom: 0; }
+.bv-eye-message--story2 strong { display: block; margin: .25rem 0; font: italic 600 clamp(1.22rem, 2.5vw, 1.6rem)/1.28 'Playfair Display', Georgia, serif; }
 .bv-eye-divider { width: 42px; height: 1px; margin: .75rem auto; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
 .bv-page--hidden   { opacity: 0; pointer-events: none; transform: translateY(30px); }
 .bv-page--visible  { opacity: 1; pointer-events: all; transform: translateY(0); }
@@ -484,7 +495,7 @@ export default function BirthdayBava() {
   const { d, h, m, s, past } = useCountdown(BDAY);
 
   useEffect(() => {
-    if (page !== "reveal" && page !== "story1") return;
+    if (page !== "reveal" && page !== "story1" && page !== "story2") return;
     const activePage = document.getElementById(`page-${page}`);
     if (activePage) activePage.scrollTop = 0;
   }, [page]);
@@ -632,30 +643,17 @@ export default function BirthdayBava() {
         </div>
 
         {/* ── PAGE 4: STORY — SOMEHOW YOU BECAME SPECIAL ─────────────────── */}
-        <div id="page-story2" className={`${pageClass("story2")} bg-story`} style={{ gap: "2rem" }}>
-          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both", maxWidth: 780 }}>
-            <span className="bv-eyebrow">Screen 3</span>
-            <h2 className="bv-h2">Somehow, You Became <em>Special</em></h2>
-            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
-              Somewhere between talking to you<br />
-              and waiting for your messages,<br />
-              you slowly became a part of my everyday life.
-            </p>
-            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
-              I didn't plan it.<br />
-              My heart just got used to you.
-            </p>
-            <div className="bv-gallery">
-              {[
-                { src: "/assets/3.jpeg", caption: "A memory I kept close." },
-                { src: "/assets/4.jpeg", caption: "One of those little moments." },
-                { src: "/assets/5.jpeg", caption: "Something I'll always remember." },
-                { src: "/assets/6.jpeg", caption: "Small things, big feelings." },
-                { src: undefined, caption: "Add your favourite photo here." },
-                { src: undefined, caption: "One more memory for us." },
-              ].map((p, i) => (
-                <PhotoSlot key={i} src={p.src} caption={p.caption} />
-              ))}
+        <div id="page-story2" className={`${pageClass("story2")} bg-story`}>
+          <div className="bv-eye-scene bv-eye-scene--story2">
+            <img className="bv-eye-fullscreen bv-eye-fullscreen--story2" src="/assets/1.jpeg" alt="Bava smiling in profile" />
+          </div>
+          <div className="bv-eye-copy bv-eye-copy--below">
+            <h2 className="bv-eye-title">Somehow, You Became <em>Special</em></h2>
+            <div className="bv-eye-divider" aria-hidden="true" />
+            <div className="bv-eye-message bv-eye-message--story2">
+              <p>Somewhere between our conversations,<br />and waiting for your messages,<br />you became part of my everyday life.<br />I never planned it; I never knew when.</p>
+              <p><strong>But somewhere along the way,<br />my heart simply got used to you. 🤍</strong></p>
+              <p>My days quietly look forward to you.</p>
             </div>
           </div>
         </div>
@@ -808,7 +806,7 @@ export default function BirthdayBava() {
               {[
                 { src: "/assets/5.jpeg", caption: "Where it all began." },
                 { src: "/assets/2.jpeg", caption: "A moment I'll never forget." },
-                { src: "/assets/3.jpeg", caption: "Simple times, deep feelings." },
+                { src: "/assets/1.jpeg", caption: "Simple times, deep feelings." },
                 { src: "/assets/4.jpeg", caption: "Your smile says everything." },
                 { src: "/assets/5.jpeg", caption: "The person who matters." },
                 { src: undefined, caption: "Add your special memory here." },
