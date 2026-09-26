@@ -565,7 +565,7 @@ export default function BirthdayBava() {
       <div className="bv-app" id="bava-birthday-app">
         <StarField />
         <Floaters show={["reveal", "wish", "final", "memories", "thankyou"].includes(page)} />
-        <Fireworks active={page === "reveal" || page === "wish" || page === "memories"} />
+        <Fireworks active={page === "reveal" || page === "wish" || page === "final" || page === "memories"} />
 
         {/* ── PAGE 1: WAITING ────────────────────────────────────── */}
         <div id="page-wait" className={`${pageClass("wait")} bg-wait`}>
