@@ -46,6 +46,8 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 #page-story1 { justify-content: flex-start; padding: 0; }
 #page-story2 { justify-content: flex-start; padding: 0; }
 #page-story3 { justify-content: flex-start; padding: 0; }
+#page-feelings { justify-content: flex-start; padding-top: clamp(1.5rem, 5svh, 3rem); }
+#page-memories { justify-content: flex-start; padding-top: clamp(4rem, 10svh, 6rem); }
 .bv-eye-scene { position: absolute; inset: 0; overflow: hidden; background: #090807; }
 .bv-eye-scene::after { position: absolute; inset: 35% 0 0; z-index: 1; background: linear-gradient(180deg, transparent 0%, rgba(5,8,15,.42) 25%, rgba(5,8,15,.88) 100%); content: ""; pointer-events: none; }
 .bv-eye-fullscreen { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
@@ -158,10 +160,69 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 /* ── dark transition ── */
 .bv-dark-reveal p { opacity:0; transition:opacity 1.4s ease; font-family:'Playfair Display',serif; font-style:italic; color:var(--ivory); font-size:clamp(1.4rem,4vw,2.6rem); line-height:1.3; margin:1.2rem 0; }
 .bv-dark-reveal p.show { opacity:1; }
+.bv-silence-inner { max-width:720px; text-align:left; }
+.bv-silence-kicker { display:flex; align-items:center; gap:.7rem; margin-bottom:1.4rem; color:var(--gold); font:600 .62rem/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; }
+.bv-silence-kicker::before { width:28px; height:1px; background:var(--gold); content:""; }
+.bv-silence-title { max-width:600px; margin:0 0 2.2rem; color:var(--ivory); font:600 clamp(2.4rem,7vw,5rem)/.98 'Playfair Display',Georgia,serif; letter-spacing:-.03em; }
+.bv-silence-title em { color:var(--blush); font-style:italic; }
+.bv-silence-message { max-width:560px; margin:0 0 1.5rem !important; padding-left:1.25rem; border-left:1px solid rgba(232,191,201,.35); color:rgba(245,240,232,.78) !important; font:400 clamp(1.2rem,2.8vw,1.55rem)/1.5 'Cormorant Garamond',Georgia,serif !important; font-style:normal !important; letter-spacing:.01em; }
+.bv-silence-message.show { color:rgba(245,240,232,.9) !important; }
+.bv-silence-message--last { padding-top:1rem; border-left-color:var(--rose); color:var(--blush) !important; font-style:italic !important; }
+.bv-silence-loves { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.bv-silence-love { position:absolute; bottom:-2rem; color:var(--rose); opacity:0; font-size:clamp(1rem,2vw,1.5rem); filter:drop-shadow(0 0 12px rgba(200,133,154,.65)); animation:bvLoveFloat 12s ease-in-out infinite; }
+.bv-silence-love:nth-child(1) { left:8%; animation-delay:-2s; }
+.bv-silence-love:nth-child(2) { left:19%; color:var(--blush); animation-delay:-8s; animation-duration:15s; }
+.bv-silence-love:nth-child(3) { left:33%; animation-delay:-5s; animation-duration:13s; }
+.bv-silence-love:nth-child(4) { left:51%; color:var(--gold); animation-delay:-10s; animation-duration:16s; }
+.bv-silence-love:nth-child(5) { left:68%; animation-delay:-4s; }
+.bv-silence-love:nth-child(6) { left:79%; color:var(--blush); animation-delay:-12s; animation-duration:14s; }
+.bv-silence-love:nth-child(7) { left:91%; animation-delay:-7s; animation-duration:17s; }
+@keyframes bvLoveFloat { 0% { opacity:0; transform:translate3d(0,2rem,0) scale(.7) rotate(-12deg); } 18% { opacity:.38; } 70% { opacity:.12; } 100% { opacity:0; transform:translate3d(1.5rem,-30rem,0) scale(1.15) rotate(18deg); } }
+.bv-silence-moon { position:absolute; top:clamp(1rem,6vh,4rem); right:clamp(-1.5rem,3vw,2.5rem); z-index:0; width:clamp(5rem,14vw,9rem); height:clamp(5rem,14vw,9rem); border-radius:50%; background:radial-gradient(circle at 34% 30%,#fff8dc 0%,#ffe8b8 48%,#c9a84c 100%); box-shadow:0 0 25px rgba(201,168,76,.35), 0 0 60px rgba(200,133,154,.14); opacity:.8; }
+.bv-silence-moon::after { position:absolute; top:14%; left:11%; width:5px; height:5px; border-radius:50%; background:rgba(255,248,220,.55); content:""; box-shadow:32px 40px 0 -1px rgba(255,248,220,.3), 63px 18px 0 -2px rgba(255,248,220,.4); }
+@media(max-width:520px){ .bv-silence-inner { text-align:left; } .bv-silence-title { margin-bottom:1.7rem; } .bv-silence-message { padding-left:1rem; } }
 
 /* ── wish list ── */
 .bv-wish-grid { display:flex; flex-direction:column; gap:.7rem; max-width:560px; margin:1.5rem auto; }
 .bv-wish-item { padding:.85rem 1.3rem; border-left:2px solid var(--rose); background:rgba(255,255,255,.04); color:rgba(245,240,232,.88); font:400 clamp(1rem,2.2vw,1.2rem)/1.55 'Cormorant Garamond',serif; text-align:left; }
+
+/* ── quiet feelings letter ── */
+.bv-feelings-letter { position:relative; z-index:1; flex:0 0 auto; width:min(100%,660px); padding:clamp(2.2rem,7vw,4.5rem) clamp(1.4rem,6vw,4.8rem); text-align:left; }
+.bv-feelings-letter::before { position:absolute; top:0; left:clamp(1.4rem,6vw,4.8rem); width:58px; height:2px; background:var(--rose); content:""; box-shadow:0 0 18px rgba(200,133,154,.65); }
+.bv-feelings-sky { position:absolute; top:clamp(1.7rem,5vw,3rem); right:clamp(1.4rem,6vw,4.8rem); width:38px; height:38px; border-radius:50%; background:var(--gold); box-shadow:0 0 24px rgba(201,168,76,.28); opacity:.9; }
+.bv-feelings-sky::before { position:absolute; top:-7px; left:10px; width:38px; height:38px; border-radius:50%; background:#100b16; content:""; }
+.bv-feelings-sky::after { position:absolute; top:-13px; left:-28px; width:3px; height:3px; border-radius:50%; background:var(--ivory); content:""; box-shadow:14px 20px 0 -1px var(--blush), 29px 3px 0 -1px var(--ivory), 45px 17px 0 -1px var(--gold); opacity:.8; }
+.bv-feelings-lights { position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+.bv-feelings-light { position:absolute; bottom:-2rem; color:var(--blush); opacity:0; filter:drop-shadow(0 0 10px rgba(232,191,201,.8)); animation:bvFeelingsLight 8s ease-in-out infinite; }
+.bv-feelings-light:nth-child(1) { left:9%; animation-delay:-1s; }
+.bv-feelings-light:nth-child(2) { left:27%; color:var(--gold); animation-delay:-5s; animation-duration:10s; }
+.bv-feelings-light:nth-child(3) { left:58%; animation-delay:-3s; animation-duration:9s; }
+.bv-feelings-light:nth-child(4) { left:82%; color:var(--gold); animation-delay:-7s; animation-duration:11s; }
+.bv-feelings-light:nth-child(5) { left:43%; color:var(--ivory); animation-delay:-8s; animation-duration:12s; }
+.bv-feelings-light:nth-child(6) { left:73%; color:var(--blush); animation-delay:-2s; animation-duration:9.5s; }
+.bv-feelings-light:nth-child(7) { left:16%; color:var(--gold); animation-delay:-10s; animation-duration:13s; }
+.bv-feelings-light:nth-child(8) { left:92%; color:var(--ivory); animation-delay:-6s; animation-duration:10.5s; }
+.bv-feelings-light:nth-child(n+9) { font-size:1rem; }
+.bv-feelings-light:nth-child(9) { left:5%; animation-delay:-4s; }
+.bv-feelings-light:nth-child(10) { left:35%; color:var(--gold); animation-delay:-9s; animation-duration:11s; }
+.bv-feelings-light:nth-child(11) { left:52%; animation-delay:-1s; animation-duration:12s; }
+.bv-feelings-light:nth-child(12) { left:66%; animation-delay:-11s; }
+.bv-feelings-light:nth-child(13) { left:87%; color:var(--gold); animation-delay:-5s; animation-duration:13s; }
+.bv-feelings-light:nth-child(14) { left:22%; animation-delay:-7s; animation-duration:10s; }
+.bv-feelings-light:nth-child(15) { left:47%; color:var(--blush); animation-delay:-3s; animation-duration:11.5s; }
+.bv-feelings-light:nth-child(16) { left:78%; animation-delay:-12s; animation-duration:12.5s; }
+@keyframes bvFeelingsLight { 0% { opacity:0; transform:translate3d(0,2rem,0) scale(.7) rotate(-10deg); } 18% { opacity:.65; } 70% { opacity:.24; } 100% { opacity:0; transform:translate3d(1.8rem,-28rem,0) scale(1.15) rotate(20deg); } }
+.bv-feelings-kicker { display:flex; align-items:center; gap:.7rem; margin-bottom:1.2rem; color:var(--gold); font:600 .62rem/1 'Inter',sans-serif; letter-spacing:.22em; text-transform:uppercase; }
+.bv-feelings-kicker::before { width:24px; height:1px; background:var(--gold); content:""; }
+.bv-feelings-title { max-width:510px; margin:0 0 2.2rem; color:var(--ivory); font:600 clamp(2.15rem,7vw,4.4rem)/.98 'Playfair Display',Georgia,serif; letter-spacing:-.03em; }
+.bv-feelings-title em { color:var(--blush); font-style:italic; }
+.bv-feelings-block { position:relative; max-width:480px; padding-left:1.15rem; border-left:1px solid rgba(232,191,201,.3); color:rgba(245,240,232,.78); font:400 clamp(1.1rem,2.8vw,1.42rem)/1.48 'Cormorant Garamond',Georgia,serif; }
+.bv-feelings-block p { margin:0 0 1.15rem; }
+.bv-feelings-block p:last-child { margin-bottom:0; }
+.bv-feelings-block strong { color:var(--ivory); font-weight:600; }
+.bv-feelings-signoff { max-width:470px; margin:2.1rem 0 0 auto; padding-top:1.35rem; border-top:1px solid rgba(201,168,76,.25); color:var(--blush); font:italic 400 clamp(1.45rem,4vw,2.15rem)/1.12 'Playfair Display',Georgia,serif; text-align:right; }
+.bv-feelings-signoff::after { display:block; margin-top:.7rem; color:rgba(201,168,76,.75); content:"— Mani"; font:400 1.25rem/1 'Great Vibes',cursive; }
+@media(max-width:520px){ .bv-feelings-letter { padding:2rem 1.3rem 2.5rem; } .bv-feelings-title { margin-bottom:1.8rem; } .bv-feelings-signoff { margin-top:1.7rem; } }
 
 /* ── final secret ── */
 .bv-secret { position:fixed; inset:0; z-index:200; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; }
@@ -687,36 +748,67 @@ export default function BirthdayBava() {
 
         {/* ── PAGE 6: FEELINGS ───────────────────────────────────── */}
         <div id="page-feelings" className={`${pageClass("feelings")} bg-feel`} style={{ gap: "1.5rem" }}>
-          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Screen 5</span>
-            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>What I Never <em>Wanted</em></h2>
-            <p className="bv-lead">
-              I never wanted to force my feelings on you.<br />
-              I never wanted to make you uncomfortable.
-            </p>
-            <div style={{ width: "60px", height: "1px", background: "rgba(200,133,154,.4)", margin: "1.5rem auto" }} />
-            <p className="bv-lead">
-              I know what you've told me, Bava…<br />
-              and I respect your feelings.
-            </p>
-            <p className="bv-lead" style={{ color: "var(--blush)" }}>
-              <em>I just wanted you to know that mine were always real.</em>
-            </p>
+          <div className="bv-feelings-lights" aria-hidden="true">
+            <span className="bv-feelings-light">✦</span>
+            <span className="bv-feelings-light">✧</span>
+            <span className="bv-feelings-light">✦</span>
+            <span className="bv-feelings-light">✧</span>
+            <span className="bv-feelings-light">·</span>
+            <span className="bv-feelings-light">✦</span>
+            <span className="bv-feelings-light">✧</span>
+            <span className="bv-feelings-light">·</span>
+            <span className="bv-feelings-light">🌙</span>
+            <span className="bv-feelings-light">✨</span>
+            <span className="bv-feelings-light">🤍</span>
+            <span className="bv-feelings-light">🌸</span>
+            <span className="bv-feelings-light">⭐</span>
+            <span className="bv-feelings-light">💫</span>
+            <span className="bv-feelings-light">💛</span>
+            <span className="bv-feelings-light">🌙</span>
+          </div>
+          <div className="bv-feelings-letter" style={{ animation: "bvFadeUp 1.2s ease both" }}>
+            <span className="bv-feelings-sky" aria-hidden="true" />
+            <span className="bv-feelings-kicker">A clear note · 05</span>
+            <h2 className="bv-feelings-title">About My <em>Feelings</em></h2>
+            <div className="bv-feelings-block">
+              <p>I never wanted to pressure you or make you uncomfortable.</p>
+              <p>I understand what you've told me, Bava, and I respect your feelings.</p>
+              <p>You don't owe me an answer. I only wanted to be honest that my feelings were real.</p>
+            </div>
+            <p className="bv-feelings-signoff">I will always respect your space.</p>
           </div>
         </div>
 
         {/* ── PAGE 7: DARK TRANSITION ────────────────────────────── */}
         <div id="page-transition" className={`${pageClass("transition")} bg-trans`}>
-          <div className="bv-dark-reveal bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Screen 6</span>
-            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Even In The <em>Silence</em></h2>
-            <p className={darkLines >= 1 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)" }}>
+          <span className="bv-silence-moon" aria-hidden="true" />
+          <div className="bv-silence-loves" aria-hidden="true">
+            <span className="bv-silence-love">🤍</span>
+            <span className="bv-silence-love">💗</span>
+            <span className="bv-silence-love">💋</span>
+            <span className="bv-silence-love">♡</span>
+            <span className="bv-silence-love">💛</span>
+            <span className="bv-silence-love">💖</span>
+            <span className="bv-silence-love">💋</span>
+            <span className="bv-silence-love">🤍</span>
+            <span className="bv-silence-love">💕</span>
+            <span className="bv-silence-love" style={{ left: "13%", animationDelay: "-9s" }}>🌹</span>
+            <span className="bv-silence-love" style={{ left: "29%", animationDelay: "-1s", animationDuration: "15s" }}>🌹</span>
+            <span className="bv-silence-love" style={{ left: "44%", animationDelay: "-6s" }}>🌹</span>
+            <span className="bv-silence-love" style={{ left: "62%", animationDelay: "-11s", animationDuration: "14s" }}>🌹</span>
+            <span className="bv-silence-love" style={{ left: "76%", animationDelay: "-3s" }}>🌹</span>
+            <span className="bv-silence-love" style={{ left: "95%", animationDelay: "-13s", animationDuration: "16s" }}>🌹</span>
+          </div>
+          <div className="bv-dark-reveal bv-inner bv-silence-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
+            <span className="bv-silence-kicker">A thought I kept · 06</span>
+            <h2 className="bv-silence-title">Even In The <em>Silence</em></h2>
+            <p className={darkLines >= 1 ? "show bv-silence-message" : "bv-silence-message"}>
               There were days I waited for your message,<br />
               checking my phone again and again,<br />
               wondering if you were busy,<br />
               wondering if I had done something wrong.
             </p>
-            <p className={darkLines >= 2 ? "show bv-lead" : "bv-lead"} style={{ fontSize: "clamp(1.1rem,2.5vw,1.4rem)", color: "var(--blush)" }}>
+            <p className={darkLines >= 2 ? "show bv-silence-message bv-silence-message--last" : "bv-silence-message bv-silence-message--last"}>
               But even in the silence…<br />
               I still cared.
             </p>
@@ -830,16 +922,17 @@ export default function BirthdayBava() {
         {/* ── PAGE 12: THANK YOU ─────────────────────────────────────── */}
         <div id="page-thankyou" className={`${pageClass("thankyou")} bg-final`} style={{ gap: "1.5rem", paddingBottom: "5rem" }}>
           <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Screen 11</span>
-            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Thank <em>You</em></h2>
+            <span className="bv-eyebrow">A little world made for you</span>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Made With <em>Care</em></h2>
             
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
-              Thank you for being part of my story, Bava.
+              I made this little world with all my effort,
+              <br />just for you, Bava.
             </p>
             
             <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
-              You may never know how much you mean to me,<br />
-              but I want you to know that I'll always remember you fondly.
+              Every word, every memory, and every light<br />
+              was chosen with a heart full of care.
             </p>
             
             <div style={{ width: "min(100%,220px)", margin: "2rem auto", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
