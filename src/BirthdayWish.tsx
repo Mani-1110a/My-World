@@ -37,12 +37,16 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 #page-reveal { justify-content: flex-start; }
 #page-story1 { justify-content: flex-start; padding: 0; }
 #page-story2 { justify-content: flex-start; padding: 0; }
+#page-story3 { justify-content: flex-start; padding: 0; }
 .bv-eye-scene { position: absolute; inset: 0; overflow: hidden; background: #090807; }
 .bv-eye-scene::after { position: absolute; inset: 35% 0 0; z-index: 1; background: linear-gradient(180deg, transparent 0%, rgba(5,8,15,.42) 25%, rgba(5,8,15,.88) 100%); content: ""; pointer-events: none; }
 .bv-eye-fullscreen { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
 .bv-eye-copy { position: absolute; right: 0; bottom: clamp(3.25rem, 5.5svh, 4.25rem); left: 0; z-index: 2; width: min(100% - 2.5rem, 800px); max-height: calc(100% - 6rem); margin: 0 auto; overflow-y: auto; padding: .8rem .25rem; text-align: center; animation: bvFadeUp 1.2s ease both; }
-.bv-eye-scene--story2 { position: relative; flex: 0 0 auto; width: 100%; height: clamp(250px, 46svh, 480px); }
-.bv-eye-fullscreen--story2 { position: relative; inset: auto; object-position: center center; transform: scale(1.09); transform-origin: center center; }
+.bv-eye-scene--story2, .bv-eye-scene--story3 { position: relative; flex: 0 0 auto; width: 100%; height: clamp(250px, 46svh, 480px); }
+.bv-eye-fullscreen--story2, .bv-eye-fullscreen--story3 { position: relative; inset: auto; object-position: center center; transform: scale(1.09); transform-origin: center center; }
+.bv-eye-scene--story3 { position: absolute; inset: 0; width: auto; height: auto; }
+.bv-eye-fullscreen--story3 { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; transform: translateY(10px) scale(1.03); transform-origin: center 30%; }
+.bv-eye-copy--story3 { bottom: clamp(4.5rem, 9svh, 6rem); }
 .bv-eye-copy--below { position: relative; inset: auto; z-index: 2; width: 100%; max-height: none; margin: 0 auto; overflow: visible; padding: clamp(1.6rem, 3.8svh, 2.2rem) 1.25rem 7rem; border-top: 1px solid rgba(232,191,201,.16); background: #110d15; }
 .bv-eye-copy--below .bv-eye-title, .bv-eye-copy--below .bv-eye-message { text-shadow: none; }
 .bv-eye-copy--below .bv-eye-title { margin-bottom: .9rem; }
@@ -495,7 +499,7 @@ export default function BirthdayBava() {
   const { d, h, m, s, past } = useCountdown(BDAY);
 
   useEffect(() => {
-    if (page !== "reveal" && page !== "story1" && page !== "story2") return;
+    if (page !== "reveal" && page !== "story1" && page !== "story2" && page !== "story3") return;
     const activePage = document.getElementById(`page-${page}`);
     if (activePage) activePage.scrollTop = 0;
   }, [page]);
@@ -659,19 +663,17 @@ export default function BirthdayBava() {
         </div>
 
         {/* ── PAGE 5: STORY — THE LITTLE THINGS ─────────────────────────── */}
-        <div id="page-story3" className={`${pageClass("story3")} bg-story`} style={{ gap: "2rem" }}>
-          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both" }}>
-            <span className="bv-eyebrow">Screen 4</span>
-            <h2 className="bv-h2">The Little <em>Things</em></h2>
-            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
-              Maybe you never noticed…<br />
-              but your smallest words stayed with me.
-            </p>
-            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem" }}>
-              A simple message from you could change my entire day.<br />
-              And sometimes, even seeing your picture<br />
-              was enough to make me smile.
-            </p>
+        <div id="page-story3" className={`${pageClass("story3")} bg-story`}>
+          <div className="bv-eye-scene bv-eye-scene--story3">
+            <img className="bv-eye-fullscreen bv-eye-fullscreen--story3" src="/assets/5.jpeg" alt="Bava smiling in the sunlight" />
+            <div className="bv-eye-copy bv-eye-copy--story3">
+              <h2 className="bv-eye-title">The Little <em>Things</em></h2>
+              <div className="bv-eye-divider" aria-hidden="true" />
+              <div className="bv-eye-message bv-eye-message--story2">
+                <p>Maybe you never noticed… but your smallest words stayed with me.</p>
+                <p>A simple message from you could change my entire day. And sometimes, even seeing your picture was enough to make me smile.</p>
+              </div>
+            </div>
           </div>
         </div>
 
