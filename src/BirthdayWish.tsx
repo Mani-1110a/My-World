@@ -34,6 +34,19 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 /* ── page system ── */
 .bv-app { width: 100vw; height: 100svh; overflow: hidden; position: relative; background: var(--navy); font-family: 'Inter', sans-serif; color: var(--ivory); }
 .bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem 8rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+#page-reveal { justify-content: flex-start; }
+#page-story1 { justify-content: flex-start; padding: 0; }
+.bv-eye-scene { position: absolute; inset: 0; overflow: hidden; background: #090807; }
+.bv-eye-scene::after { position: absolute; inset: 35% 0 0; z-index: 1; background: linear-gradient(180deg, transparent 0%, rgba(5,8,15,.42) 25%, rgba(5,8,15,.88) 100%); content: ""; pointer-events: none; }
+.bv-eye-fullscreen { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 25%; }
+.bv-eye-copy { position: absolute; right: 0; bottom: clamp(3.25rem, 5.5svh, 4.25rem); left: 0; z-index: 2; width: min(100% - 2.5rem, 800px); max-height: calc(100% - 6rem); margin: 0 auto; overflow-y: auto; padding: .8rem .25rem; text-align: center; animation: bvFadeUp 1.2s ease both; }
+.bv-eye-eyebrow { display: block; margin-bottom: .65rem; color: var(--gold); font: 600 .62rem/1.2 'Inter', sans-serif; letter-spacing: .24em; text-transform: uppercase; }
+.bv-eye-title { margin: 0 0 .8rem; color: var(--ivory); font: italic 600 clamp(1.5rem, 4vw, 2.6rem)/1.1 'Playfair Display', Georgia, serif; text-shadow: 0 2px 18px rgba(0,0,0,.65); }
+.bv-eye-title em { color: var(--blush); font-style: italic; }
+.bv-eye-message { max-width: 720px; margin: 0 auto; color: rgba(255,248,242,.95); font: 400 clamp(.95rem, 1.9vw, 1.12rem)/1.42 'Cormorant Garamond', Georgia, serif; text-shadow: 0 2px 12px rgba(0,0,0,.8); }
+.bv-eye-message p { margin: 0 0 .55rem; }
+.bv-eye-message strong { color: var(--blush); font-weight: 600; }
+.bv-eye-divider { width: 42px; height: 1px; margin: .75rem auto; background: linear-gradient(90deg, transparent, var(--gold), transparent); }
 .bv-page--hidden   { opacity: 0; pointer-events: none; transform: translateY(30px); }
 .bv-page--visible  { opacity: 1; pointer-events: all; transform: translateY(0); }
 .bv-page--leaving  { opacity: 0; pointer-events: none; transform: translateY(-30px); }
@@ -52,7 +65,7 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 .bv-fw { position: fixed; inset: 0; z-index: 2; pointer-events: none; }
 
 /* ── nav arrow ── */
-.bv-nav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; gap: .8rem; padding: 1.5rem; background: linear-gradient(transparent, rgba(5,8,15,.8)); backdrop-filter: blur(10px); }
+.bv-nav { position: fixed; bottom: 1.25rem; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 0 1rem; background: transparent; }
 .bv-nav-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(201,168,76,.5); background: rgba(201,168,76,.08); color: var(--gold); font-size: 1.2rem; cursor: pointer; backdrop-filter: blur(10px); transition: all .3s ease; display: grid; place-items: center; }
 .bv-nav-btn:hover { background: rgba(201,168,76,.2); transform: scale(1.1); }
 .bv-nav-dots { display: flex; gap: .4rem; }
@@ -470,6 +483,12 @@ export default function BirthdayBava() {
   const [secretStep, setSecretStep] = useState(0);
   const { d, h, m, s, past } = useCountdown(BDAY);
 
+  useEffect(() => {
+    if (page !== "reveal" && page !== "story1") return;
+    const activePage = document.getElementById(`page-${page}`);
+    if (activePage) activePage.scrollTop = 0;
+  }, [page]);
+
   const goTo = useCallback((next: Page) => {
     setLeaving(true);
     setTimeout(() => { setPage(next); setLeaving(false); }, 700);
@@ -598,30 +617,17 @@ export default function BirthdayBava() {
         </div>
 
         {/* ── PAGE 3: STORY — HOW IT STARTED ──────────────────────── */}
-        <div id="page-story1" className={`${pageClass("story1")} bg-story`} style={{ gap: "2rem" }}>
-          <div className="bv-inner" style={{ animation: "bvFadeUp 1.2s ease both", maxWidth: 680 }}>
-            <span className="bv-eyebrow">Screen 2</span>
-            <h2 className="bv-h2">How It <em>Started</em></h2>
-            
-            <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
-              I never knew when it happened.
-            </p>
-            
-            <p className="bv-lead" style={{ color: "var(--blush)", marginBottom: "1.5rem", fontStyle: "italic" }}>
-              Maybe it was hidden inside our random conversations,<br />
-              the little "tinnava?" messages,<br />
-              the silly talks,<br />
-              and those ordinary moments I never thought I'd remember this much.
-            </p>
-            
-            <div style={{ width: "min(100%,280px)", margin: "2rem auto", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
-              <PhotoSlot src="/assets/5.jpeg" caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
+        <div id="page-story1" className={`${pageClass("story1")} bg-story`}>
+          <div className="bv-eye-scene">
+            <img className="bv-eye-fullscreen" src="/assets/5.jpeg" alt="A sketch of Bava's eyes in a sunlit notebook" />
+            <div className="bv-eye-copy">
+              <span className="bv-eye-eyebrow">A little truth from my heart</span>
+              <h2 className="bv-eye-title">I never planned to <em>feel this much.</em></h2>
+              <div className="bv-eye-message">
+                <p>Your eyes hold a softness I find myself remembering. Looking at this sketch brings back all those butterflies, the warmth, and the tenderness I feel whenever I think of you.</p>
+                <p><strong>I care for you as you are</strong>, with no expectations or pressure. I only wanted you to know that my feelings are real, gentle, and held with my whole heart.</p>
+              </div>
             </div>
-            
-            <p className="bv-lead" style={{ color: "var(--dim)", marginTop: "1.5rem" }}>
-              Some people enter your life quietly…<br />
-              and somehow become impossible to forget.
-            </p>
           </div>
         </div>
 
@@ -800,7 +806,7 @@ export default function BirthdayBava() {
             
             <div className="bv-gallery">
               {[
-                { src: "/assets/1.jpeg", caption: "Where it all began." },
+                { src: "/assets/5.jpeg", caption: "Where it all began." },
                 { src: "/assets/2.jpeg", caption: "A moment I'll never forget." },
                 { src: "/assets/3.jpeg", caption: "Simple times, deep feelings." },
                 { src: "/assets/4.jpeg", caption: "Your smile says everything." },
@@ -846,11 +852,6 @@ export default function BirthdayBava() {
               >
                 ← Back
               </button>
-              <div className="bv-page-counter">
-                <span className="bv-current-page">{idx + 1}</span>
-                <span className="bv-divider">/</span>
-                <span className="bv-total-pages">{PAGES.length}</span>
-              </div>
               <button 
                 className="bv-nav-next" 
                 onClick={nextPage}
