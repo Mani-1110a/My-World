@@ -5,6 +5,9 @@ import photo3 from "./assets/3.jpeg";
 import photo4 from "./assets/4.jpeg";
 import photo5 from "./assets/5.jpeg";
 import photo6 from "./assets/6.jpeg";
+import photo7 from "./assets/7.jpeg";
+import photo8 from "./assets/8.jpeg";
+import photo9 from "./assets/9.jpeg";
 
 /* ══════════════════════════════════════════════════════════════════════
    CONFIG — edit these to personalise
@@ -40,7 +43,8 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 
 /* ── page system ── */
 .bv-app { width: 100vw; height: 100svh; overflow: hidden; position: relative; background: var(--navy); font-family: 'Inter', sans-serif; color: var(--ivory); }
-.bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem 1.5rem 8rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+.bv-page { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 2rem 1.5rem 8rem 1.5rem; overflow-y: auto; overflow-x: hidden; transition: opacity .8s ease, transform .8s cubic-bezier(.16,1,.3,1); }
+#page-wait > .bv-inner, #page-transition > .bv-dark-reveal, #page-scene > div, #page-wish > .bv-inner, #page-thankyou > .bv-inner { margin-top: auto; margin-bottom: auto; }
 #page-reveal { justify-content: flex-start; }
 #page-final { justify-content: flex-start; }
 #page-story1 { justify-content: flex-start; padding: 0; }
@@ -160,7 +164,9 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 /* ── dark transition ── */
 .bv-dark-reveal p { opacity:0; transition:opacity 1.4s ease; font-family:'Playfair Display',serif; font-style:italic; color:var(--ivory); font-size:clamp(1.4rem,4vw,2.6rem); line-height:1.3; margin:1.2rem 0; }
 .bv-dark-reveal p.show { opacity:1; }
-.bv-silence-inner { max-width:720px; text-align:left; }
+.bv-silence-inner { width:min(100%,720px); max-width:720px; align-self:flex-start; margin-left:clamp(0px,7vw,6rem); text-align:left; }
+.bv-silence-photo { position:absolute; inset:0; z-index:0; display:block; width:100%; height:100%; object-fit:cover; object-position:center 28%; opacity:.62; }
+.bv-silence-overlay { position:absolute; inset:0; z-index:1; background:linear-gradient(90deg,rgba(3,2,8,.88),rgba(3,2,8,.52) 58%,rgba(3,2,8,.35)),linear-gradient(0deg,rgba(3,2,8,.6),transparent 55%); pointer-events:none; }
 .bv-silence-kicker { display:flex; align-items:center; gap:.7rem; margin-bottom:1.4rem; color:var(--gold); font:600 .62rem/1 'Inter',sans-serif; letter-spacing:.24em; text-transform:uppercase; }
 .bv-silence-kicker::before { width:28px; height:1px; background:var(--gold); content:""; }
 .bv-silence-title { max-width:600px; margin:0 0 2.2rem; color:var(--ivory); font:600 clamp(2.4rem,7vw,5rem)/.98 'Playfair Display',Georgia,serif; letter-spacing:-.03em; }
@@ -180,7 +186,7 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 @keyframes bvLoveFloat { 0% { opacity:0; transform:translate3d(0,2rem,0) scale(.7) rotate(-12deg); } 18% { opacity:.38; } 70% { opacity:.12; } 100% { opacity:0; transform:translate3d(1.5rem,-30rem,0) scale(1.15) rotate(18deg); } }
 .bv-silence-moon { position:absolute; top:clamp(1rem,6vh,4rem); right:clamp(-1.5rem,3vw,2.5rem); z-index:0; width:clamp(5rem,14vw,9rem); height:clamp(5rem,14vw,9rem); border-radius:50%; background:radial-gradient(circle at 34% 30%,#fff8dc 0%,#ffe8b8 48%,#c9a84c 100%); box-shadow:0 0 25px rgba(201,168,76,.35), 0 0 60px rgba(200,133,154,.14); opacity:.8; }
 .bv-silence-moon::after { position:absolute; top:14%; left:11%; width:5px; height:5px; border-radius:50%; background:rgba(255,248,220,.55); content:""; box-shadow:32px 40px 0 -1px rgba(255,248,220,.3), 63px 18px 0 -2px rgba(255,248,220,.4); }
-@media(max-width:520px){ .bv-silence-inner { text-align:left; } .bv-silence-title { margin-bottom:1.7rem; } .bv-silence-message { padding-left:1rem; } }
+@media(max-width:520px){ .bv-silence-inner { margin-left:0; text-align:left; } .bv-silence-title { margin-bottom:1.7rem; } .bv-silence-message { padding-left:1rem; } }
 
 /* ── wish list ── */
 .bv-wish-grid { display:flex; flex-direction:column; gap:.7rem; max-width:560px; margin:1.5rem auto; }
@@ -189,6 +195,10 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 /* ── quiet feelings letter ── */
 .bv-feelings-letter { position:relative; z-index:1; flex:0 0 auto; width:min(100%,660px); padding:clamp(2.2rem,7vw,4.5rem) clamp(1.4rem,6vw,4.8rem); text-align:left; }
 .bv-feelings-letter::before { position:absolute; top:0; left:clamp(1.4rem,6vw,4.8rem); width:58px; height:2px; background:var(--rose); content:""; box-shadow:0 0 18px rgba(200,133,154,.65); }
+.bv-feelings-gallery { display:flex; align-items:center; justify-content:center; gap:.75rem; margin:0 0 1.6rem; }
+.bv-feelings-photo { flex:1; max-width:145px; aspect-ratio:4/5; overflow:hidden; border:1px solid rgba(201,168,76,.35); border-radius:8px; background:rgba(255,255,255,.04); }
+.bv-feelings-photo img { display:block; width:100%; height:100%; object-fit:cover; object-position:center 22%; transform:scale(1.16); transition:transform .5s ease; }
+.bv-feelings-photo:hover img { transform:scale(1.28); }
 .bv-feelings-sky { position:absolute; top:clamp(1.7rem,5vw,3rem); right:clamp(1.4rem,6vw,4.8rem); width:38px; height:38px; border-radius:50%; background:var(--gold); box-shadow:0 0 24px rgba(201,168,76,.28); opacity:.9; }
 .bv-feelings-sky::before { position:absolute; top:-7px; left:10px; width:38px; height:38px; border-radius:50%; background:#100b16; content:""; }
 .bv-feelings-sky::after { position:absolute; top:-13px; left:-28px; width:3px; height:3px; border-radius:50%; background:var(--ivory); content:""; box-shadow:14px 20px 0 -1px var(--blush), 29px 3px 0 -1px var(--ivory), 45px 17px 0 -1px var(--gold); opacity:.8; }
@@ -223,6 +233,8 @@ html, body { height: 100%; overflow: hidden; background: var(--navy); }
 .bv-feelings-signoff { max-width:470px; margin:2.1rem 0 0 auto; padding-top:1.35rem; border-top:1px solid rgba(201,168,76,.25); color:var(--blush); font:italic 400 clamp(1.45rem,4vw,2.15rem)/1.12 'Playfair Display',Georgia,serif; text-align:right; }
 .bv-feelings-signoff::after { display:block; margin-top:.7rem; color:rgba(201,168,76,.75); content:"— Mani"; font:400 1.25rem/1 'Great Vibes',cursive; }
 @media(max-width:520px){ .bv-feelings-letter { padding:2rem 1.3rem 2.5rem; } .bv-feelings-title { margin-bottom:1.8rem; } .bv-feelings-signoff { margin-top:1.7rem; } }
+.bv-proposal { max-width:560px; margin:1rem auto .6rem; color:var(--blush); font:italic 600 clamp(1.5rem,4vw,2.35rem)/1.2 'Playfair Display',Georgia,serif; }
+.bv-proposal-note { max-width:500px; margin:0 auto; color:var(--dim); font:400 clamp(1.05rem,2.5vw,1.3rem)/1.5 'Cormorant Garamond',Georgia,serif; }
 
 /* ── final secret ── */
 .bv-secret { position:fixed; inset:0; z-index:200; background:#000; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:2rem; }
@@ -568,7 +580,6 @@ export default function BirthdayBava() {
   const { d, h, m, s, past } = useCountdown(BDAY);
 
   useEffect(() => {
-    if (page !== "reveal" && page !== "story1" && page !== "story2" && page !== "story3") return;
     const activePage = document.getElementById(`page-${page}`);
     if (activePage) activePage.scrollTop = 0;
   }, [page]);
@@ -660,7 +671,7 @@ export default function BirthdayBava() {
                   ))}
                 </div>
                 <p style={{ color: "var(--dim)", font: "400 .9rem/1.6 'Inter',sans-serif" }}>
-                  until a special someone's birthday 🌙
+                  Counting down to my Bangaram's special day 🌙
                 </p>
                 <div style={{ marginTop: "2rem" }}>
                   <button className="bv-btn" onClick={() => goTo("reveal")}>
@@ -725,7 +736,7 @@ export default function BirthdayBava() {
             <div className="bv-eye-divider" aria-hidden="true" />
             <div className="bv-eye-message bv-eye-message--story2">
               <p>Somewhere between our conversations,<br />and waiting for your messages,<br />you became part of my everyday life.<br />I never planned it; I never knew when.</p>
-              <p><strong>But somewhere along the way,<br />my heart simply got used to you. 🤍</strong></p>
+              <p><strong>Somewhere along the way,<br />you became someone I truly care about. 🤍</strong></p>
               <p>My days quietly look forward to you.</p>
             </div>
           </div>
@@ -770,10 +781,17 @@ export default function BirthdayBava() {
             <span className="bv-feelings-sky" aria-hidden="true" />
             <span className="bv-feelings-kicker">A clear note · 05</span>
             <h2 className="bv-feelings-title">About My <em>Feelings</em></h2>
+            <div className="bv-feelings-gallery" role="group" aria-label="Close-up photos">
+              {[photo8, photo7, photo9].map((src, index) => (
+                <div className="bv-feelings-photo" key={src}>
+                  <img src={src} alt={`Close-up portrait ${index + 1}`} />
+                </div>
+              ))}
+            </div>
             <div className="bv-feelings-block">
               <p>I never wanted to pressure you or make you uncomfortable.</p>
               <p>I understand what you've told me, Bava, and I respect your feelings.</p>
-              <p>You don't owe me an answer. I only wanted to be honest that my feelings were real.</p>
+              <p>You don't have to reply or feel the same way. I just wanted to tell you that I truly care about you.</p>
             </div>
             <p className="bv-feelings-signoff">I will always respect your space.</p>
           </div>
@@ -781,6 +799,8 @@ export default function BirthdayBava() {
 
         {/* ── PAGE 7: DARK TRANSITION ────────────────────────────── */}
         <div id="page-transition" className={`${pageClass("transition")} bg-trans`}>
+          <img className="bv-silence-photo" src={photo7} alt="" aria-hidden="true" />
+          <div className="bv-silence-overlay" aria-hidden="true" />
           <span className="bv-silence-moon" aria-hidden="true" />
           <div className="bv-silence-loves" aria-hidden="true">
             <span className="bv-silence-love">🤍</span>
@@ -866,7 +886,7 @@ export default function BirthdayBava() {
               <PhotoSlot src={photo5} caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
 
-            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>My Birthday Wish <em>For You</em></h2>
+            <h2 className="bv-h2" style={{ marginBottom: "1.5rem" }}>Birthday Wish <em>For You Bangaram</em></h2>
             
             <p className="bv-lead" style={{ marginBottom: "1.5rem" }}>
               Today, I don't want anything from you.
@@ -908,6 +928,9 @@ export default function BirthdayBava() {
                 { src: photo4, caption: "Your smile says everything." },
                 { src: photo3, caption: "The person who matters." },
                 { src: photo6, caption: "A memory I keep close." },
+                { src: photo8, caption: "Another moment to remember." },
+                { src: photo7, caption: "The face behind these memories." },
+                { src: photo9, caption: "A smile I keep close." },
               ].map((p, i) => (
                 <PhotoSlot key={i} src={p.src} caption={p.caption} />
               ))}
@@ -934,6 +957,7 @@ export default function BirthdayBava() {
             <div style={{ width: "min(100%,220px)", margin: "2rem auto", borderRadius: "50%", overflow: "hidden", border: "3px solid rgba(201,168,76,.5)", boxShadow: "0 0 0 10px rgba(201,168,76,.06), 0 0 50px rgba(201,168,76,.25)", animation: "bvGlowPulse 3s ease-in-out infinite" }}>
               <PhotoSlot src={photo5} caption="Bava" style={{ borderRadius: "50%", aspectRatio: "1" }} />
             </div>
+            <p className="bv-proposal">My Bangaram Bava Bujji, I love you so much.</p>
           </div>
         </div>
 
