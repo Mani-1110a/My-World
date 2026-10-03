@@ -673,11 +673,13 @@ export default function BirthdayBava() {
                 <p style={{ color: "var(--dim)", font: "400 .9rem/1.6 'Inter',sans-serif" }}>
                   Counting down to my Bangaram's special day 🌙
                 </p>
-                <div style={{ marginTop: "2rem" }}>
-                  <button className="bv-btn" onClick={() => goTo("reveal")}>
-                    {past ? "Begin →" : "Can't wait — take me in"}
-                  </button>
-                </div>
+                {past && (
+                  <div style={{ marginTop: "2rem" }}>
+                    <button className="bv-btn" onClick={() => goTo("reveal")}>
+                      Begin →
+                    </button>
+                  </div>
+                )}
               </>
             )}
           </div>
