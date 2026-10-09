@@ -659,6 +659,11 @@ export default function BirthdayBava() {
                 <p style={{ color: "var(--gold)", fontFamily: "'Playfair Display',serif", fontSize: "clamp(1.8rem,5vw,3rem)", marginBottom: "1.5rem", animation: "bvHeartbeat 1.8s ease-in-out infinite" }}>
                   It's time 🤍
                 </p>
+                <div style={{ marginTop: "2rem" }}>
+                  <button className="bv-btn" onClick={() => goTo("reveal")}>
+                    Begin →
+                  </button>
+                </div>
               </div>
             ) : (
               <>
@@ -673,13 +678,6 @@ export default function BirthdayBava() {
                 <p style={{ color: "var(--dim)", font: "400 .9rem/1.6 'Inter',sans-serif" }}>
                   Counting down to my Bangaram's special day 🌙
                 </p>
-                {past && (
-                  <div style={{ marginTop: "2rem" }}>
-                    <button className="bv-btn" onClick={() => goTo("reveal")}>
-                      Begin →
-                    </button>
-                  </div>
-                )}
               </>
             )}
           </div>
